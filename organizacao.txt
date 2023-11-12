@@ -1,0 +1,26 @@
+Comandos
+RECEBA(A,B,C) --> Lista de variaveis que serao utilizadas no programa
+DEVOLVA(Z) --> Lista de variaveis de saida do programa. ex: Z = A+B+C. -->Precisa imprimir saida no terminal
+HORADOSHOW --> Sinaliza que logo após ele vem uma sequencia de comandos
+AQUIACABOU --> Sinaliza o fim do programa //                                #define CODE_EXIT 2
+
+ENQUANTO varname FACA cmds FIM --> Equanto valor  de varname !=0(verdadeiro) ele executa cmds #define CODE_WHILE 5
+ENQUANTO expr FACA cmds FIM --> Equanto valor  da expressao verdadeira ele executa cmds 
+          |->GT(A,B): A>B
+          |->GE(A,B): A>=B
+          |->LE(A,B): A<=B
+          |->LT(A,B): A<B
+FACA
+FIM
+
+SE condicao ENTAO comando
+SE condicao ENTAO comando SENAO comando
+EXECUTE(num, comandos) --> executa comando num vezes
+SOMA(A,B) ou entao A+B --> acho mais fácil implementar a segunda opcao //   #define CODE_OPR_ADD 3
+MULT(A,B) ou entao A*B --> tambem acho mais facil a 2 opcao
+ZERO(A) --> A fica com valor =0                                             #define CODE_OPR_ZERO 4
+
+#define CODE_FUNCTION 1
+
+
+ bison -d grammar.y && flex lexic.l && gcc -c lex.yy.c grammar.tab.c && gcc -o compile lex.yy.o grammar.tab.o -ll
