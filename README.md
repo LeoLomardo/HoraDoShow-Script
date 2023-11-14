@@ -3,4 +3,4 @@
 
 
 ## Rodar
- bison -d grammar.y && flex lexic.l && gcc -c lex.yy.c grammar.tab.c && gcc -o compile lex.yy.o grammar.tab.o -ll
+ bison -d grammar.y && flex lexic.l && gcc -c lex.yy.c grammar.tab.c && gcc -o compile lex.yy.o grammar.tab.o -lfl

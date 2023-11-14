@@ -56,21 +56,31 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     RECEBA = 258,                  /* RECEBA  */
     DEVOLVA = 259,                 /* DEVOLVA  */
-    AQUIACABOU = 260,              /* AQUIACABOU  */
+    FIM = 260,                     /* FIM  */
     ENQUANTO = 261,                /* ENQUANTO  */
     FACA = 262,                    /* FACA  */
-    ZERO = 263,                    /* ZERO  */
-    ABRE = 264,                    /* ABRE  */
-    FECHA = 265,                   /* FECHA  */
-    IGUAL = 266,                   /* IGUAL  */
-    ENTAO = 267,                   /* ENTAO  */
-    ID = 268,                      /* ID  */
-    VEZES = 269,                   /* VEZES  */
-    SE = 270,                      /* SE  */
-    SENAO = 271,                   /* SENAO  */
-    FIMSE = 272,                   /* FIMSE  */
-    FIMWHILE = 273,                /* FIMWHILE  */
-    FIM = 274                      /* FIM  */
+    AQUIACABOU = 263,              /* AQUIACABOU  */
+    HORADOSHOW = 264,              /* HORADOSHOW  */
+    ZERO = 265,                    /* ZERO  */
+    ABRE = 266,                    /* ABRE  */
+    FIMSE = 267,                   /* FIMSE  */
+    EXECUTE = 268,                 /* EXECUTE  */
+    FIMEXE = 269,                  /* FIMEXE  */
+    FECHA = 270,                   /* FECHA  */
+    IGUAL = 271,                   /* IGUAL  */
+    GT = 272,                      /* GT  */
+    LT = 273,                      /* LT  */
+    GE = 274,                      /* GE  */
+    LE = 275,                      /* LE  */
+    ENTAO = 276,                   /* ENTAO  */
+    SOMA = 277,                    /* SOMA  */
+    ID = 278,                      /* ID  */
+    VEZES = 279,                   /* VEZES  */
+    SE = 280,                      /* SE  */
+    SENAO = 281,                   /* SENAO  */
+    MULT = 282,                    /* MULT  */
+    FIMENQUANTO = 283,             /* FIMENQUANTO  */
+    VIRG = 284                     /* VIRG  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -79,13 +89,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 147 "grammar.y"
+#line 187 "grammar.y"
 
     int var;
     char *content;
     struct llist *llistvar;
 
-#line 89 "grammar.tab.h"
+#line 99 "grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
