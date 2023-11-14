@@ -1,20 +1,21 @@
 #include <stdio.h> 
  
 int main(void) { 
-	int X;
+	unsigned int X;
 	printf("RECEBA [X]: ");
 	scanf("%d",&X); 
  
- 	int Y;
+ 	unsigned int Y;
 	printf("RECEBA [Y]: ");
 	scanf("%d",&Y); 
  
- 	int Z;
+ 	unsigned int Z;
 
-	int K = X;
-	for (int i = 0; i < Y; i++) {
-	X = X + Y ;
+	unsigned int X = 3;
+	for (int i = 0; i < X; i++) {
+	Y = Y + Y ;
 	}
+
 	printf("DEVOLVA: [Z] = %d \n", Z);
 	return 0;
 }

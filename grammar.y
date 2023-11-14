@@ -20,20 +20,22 @@
 #define CODE_MENOR 14
 #define CODE_MENOR_IGUAL 15
 #define CODE_ID_NOVO 16
+#define CODE_HSHOW 17
+#define CODE_SPACE 18
 #define CODE_END -1
-
+char *buffer = NULL;
 extern int yylex();
 extern FILE *yyin;
 extern int yyparse();
 FILE *cFile;
-
+char *nomeAquivo = "exemplo1.c";
 void yyerror(const char *s){
     fprintf(stderr, "%s\n", s);
     exit(errno);
 }
 
 void openFile(){
-    cFile = fopen("cCode.c","w+");
+    cFile = fopen(nomeAquivo,"w+");
 
     if (cFile == NULL){
         printf("Erro ao gerar arquivo");
@@ -49,6 +51,11 @@ void cWriter(LLIST *llist){
     while(llist != NULL) {
 
         switch(llist->line.cmd){
+            /* CASE SPACE; */
+            case CODE_SPACE: {
+                fprintf(cFile, "\t\n");
+                break;
+            }
             /* CASE ZERO(ID) ID = 0; */
             case CODE_OPR_ZERO: {
                 fprintf(cFile, "\t%s = 0;\n", llist->line.v1);
@@ -61,7 +68,7 @@ void cWriter(LLIST *llist){
             }
             /* CASE EQUAL ID = ID; */
             case CODE_EQUAL: {
-                fprintf(cFile, "\tint %s = %s;\n",llist->line.v1, llist->line.v2);
+                fprintf(cFile, "\t%s = %s;\n",llist->line.v1, llist->line.v2);
                 break;
             }
             /* CASE SOMA(ID) ID = ID + ID; */
@@ -81,19 +88,23 @@ void cWriter(LLIST *llist){
             }
             /* CASE FUNCTION OR ENTRY, START VARIABLES */
             case CODE_FUNCTION: {
-
                 char *v1 = strtok(llist->line.v1, ",");
                 
-                while (v1 != NULL){
-
-                    fprintf(cFile, "\tint %s;\n",v1);
+                while (v1 != NULL) {
+                    fprintf(cFile, "\tunsigned int %s;\n", v1);
                     fprintf(cFile, "\tprintf(\"RECEBA [%s]: \");\n", v1);
-                    fprintf(cFile, "\tscanf(\"%s\",&%s); \n", "%d", v1);
+                    fprintf(cFile, "\tscanf(\"%s\", &%s); \n", "%d", v1);
                     fprintf(cFile, " \n ");
-                    v1 = strtok(NULL, " ");
+                    v1 = strtok(NULL, ",");
                 }
+
                 char *v2 = strtok(llist->line.v2, ",");
-                fprintf(cFile, "\tint %s;\n",v2);
+                fprintf(cFile, "\tunsigned int %s;\n", v2);
+                fprintf(cFile, "\n");
+
+                break;
+            }
+             case CODE_HSHOW: {
                 fprintf(cFile, "\n");
                 break;
             }
@@ -121,7 +132,7 @@ void cWriter(LLIST *llist){
             }
             /* CASE FOR */
             case CODE_REPEAT: {
-                fprintf(cFile, "\tfor (int i = 0; i < %s; i++) {\n", llist->line.v1);
+                fprintf(cFile, "\tfor (int i = 0; i < %s; i++) {\n", llist->line.v1 );
                 break;
             }
             /* CASE MAIOR IGUAL */
@@ -145,7 +156,7 @@ void cWriter(LLIST *llist){
                 break;
             }
             case CODE_ID_NOVO: {
-                fprintf(cFile, "\t int %s;\n", llist->line.v1);
+                fprintf(cFile, "\tunsigned int %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
 
@@ -159,7 +170,6 @@ void cWriter(LLIST *llist){
 
 %token RECEBA
 %token DEVOLVA
-%token FIM
 %token ENQUANTO
 %token FACA
 %token AQUIACABOU
@@ -168,7 +178,6 @@ void cWriter(LLIST *llist){
 %token ABRE
 %token FIMSE
 %token EXECUTE
-%token FIMEXE
 %token FECHA
 %token IGUAL
 %token GT
@@ -178,12 +187,12 @@ void cWriter(LLIST *llist){
 %token ENTAO
 %token SOMA
 %token <content> ID
-%token VEZES
 %token SE
 %token SENAO
 %token MULT
 %token FIMENQUANTO
 %token VIRG
+%token NEWLINE
 %union{
     int var;
     char *content;
@@ -206,25 +215,39 @@ program : RECEBA varlist DEVOLVA varlist HORADOSHOW cmds AQUIACABOU {
     llist->line.v2 = $4;
     llist->line.cmd = CODE_FUNCTION;
     addLLISTstart(llist, $6);
+    
+    LLIST *aux1 = (LLIST *)malloc(sizeof(LLIST));
+    if (aux1 == NULL) printf("ERROR READING PROGRAM EXIT ENTRY\n");
+    aux1->line.cmd  = CODE_HSHOW;
+    addLLISTend(aux1, llist);
 
-    LLIST *aux = (LLIST *)malloc(sizeof(LLIST));
-    if (aux == NULL) printf("ERROR READING PROGRAM EXIT ENTRY\n");
+    LLIST *aux2 = (LLIST *)malloc(sizeof(LLIST));
+    if (aux2 == NULL) printf("ERROR READING PROGRAM EXIT ENTRY\n");
 
-    aux->line.v1 = $4;
-    aux->line.cmd = CODE_EXIT;
-    addLLISTend(aux, llist);
+    aux2->line.v1 = $4;
+    aux2->line.cmd = CODE_EXIT;
+    addLLISTend(aux2, llist);
 
     cWriter(llist);
 };
 
 varlist : varlist VIRG ID {
-    char buffer[20];
-    snprintf(buffer, 20, "%s,%s", $1,$3);
+    // Aloca ou realoca memória para o buffer e concatena o novo ID
+    if (buffer == NULL) {
+        buffer = strdup($3);
+    } else {
+        size_t new_size = strlen(buffer) + strlen($3) + 2;  // +2 para a vírgula e o caractere nulo
+        buffer = realloc(buffer, new_size);
+        strcat(buffer, ",");
+        strcat(buffer, $3);
+    }
     $$ = buffer;
 }
-       | ID {$$ = $1;}
-       | /* vazio */ {$$ = NULL;}
-       ;
+| ID {
+    // Inicializa o buffer com o primeiro ID
+    buffer = strdup($1);
+    $$ = buffer;
+};
 
 
 cmds    :   cmds    cmd { addLLISTend($2, $1); $$ = $1; }
@@ -233,23 +256,23 @@ cmds    :   cmds    cmd { addLLISTend($2, $1); $$ = $1; }
 
 cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
-    LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-    if (llist == NULL) printf("ERROR READGING COMMAND ENTRY");
+        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
 
-    llist->line.v1 = $2;
-    llist->line.cmd = CODE_WHILE;
-    addLLISTend($4, llist);
+        llist->line.v1 = $2;
+        llist->line.cmd = CODE_WHILE;
+        addLLISTend($4, llist);
 
-    LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-    if (aux == NULL) printf("ERROR READING END ENTRY");
+        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+        if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
-    aux->line.cmd = CODE_END;
-    addLLISTend(aux, llist);
-    $$ = llist;
-}
+        aux->line.cmd = CODE_END;
+        addLLISTend(aux, llist);
+        $$ = llist;
+    }
         | ENQUANTO LT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO{
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENTRY");
+        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
 
         llist->line.v1 = $4;
         llist->line.v2 = $6;
@@ -257,7 +280,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         addLLISTend($9, llist);
 
         LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENTRY");
+        if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux, llist);
@@ -266,7 +289,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
     }
         | ENQUANTO LE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO{
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENTRY");
+        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
 
         llist->line.v1 = $4;
         llist->line.v2 = $6;
@@ -274,7 +297,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         addLLISTend($9, llist);
 
         LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENTRY");
+        if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux, llist);
@@ -283,7 +306,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
     }
         | ENQUANTO GE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO{
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENTRY");
+        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
 
         llist->line.v1 = $4;
         llist->line.v2 = $6;
@@ -291,7 +314,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         addLLISTend($9, llist);
 
         LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENTRY");
+        if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux, llist);
@@ -300,7 +323,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
     }
         | ENQUANTO GT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO{
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENTRY");
+        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
 
         llist->line.v1 = $4;
         llist->line.v2 = $6;
@@ -308,7 +331,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         addLLISTend($9, llist);
 
         LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENTRY");
+        if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux, llist);
@@ -318,45 +341,45 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         
         | SOMA ABRE ID VIRG ID FECHA {
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) {
-            printf("ERROR READING ADDITION\n");
-            exit(EXIT_FAILURE);
-        }
+        if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+
 
         llist->line.v1 = $3;
-        llist->line.v2 = $5;  // Agora temos dois identificadores para a soma.
+        llist->line.v2 = $5;
         llist->line.cmd = CODE_OPR_ADD;
         $$ = llist;
 }
 
         
         | ID IGUAL ID {
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IGUAL\n");
 
-        if (llist == NULL) printf("ERROR READING ATTRIBUTION\n");
-        llist->line.v1 = $1;
-        llist->line.v2 = $3;
-        
-        if(existsInList(llist->line.v1,llist) == 0){    
+            if(existsInBuffer(buffer, $1) == 0){
+            llist->line.v1 = $1;
+            llist->line.v2 = $3;
             llist->line.cmd = CODE_ID_NOVO; 
+        } else {
+            // A variável já existe na lista
+            llist->line.v1 = $1;
+            llist->line.v2 = $3;
+            llist->line.cmd = CODE_EQUAL;
         }
-        
-        llist->line.cmd = CODE_EQUAL;
-        $$ = llist;
-        
-        
-    }
-        | EXECUTE cmds VEZES ID FIMEXE {
+
+            // Adiciona o nó à lista
+            $$ = llist;
+        }
+        | EXECUTE ABRE ID VIRG cmds FECHA {
 
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING LOOP");
 
-        llist->line.v1 = $4;
+        llist->line.v1 = $3;
         llist->line.cmd = CODE_REPEAT;
-        addLLISTend($2,llist);
+        addLLISTend($5,llist);
 
         LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END");
+        if (aux == NULL) printf("ERROR READING LOOP");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux,llist);
@@ -374,7 +397,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
         addLLISTend($4,llist);
 
         LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END");
+        if (aux == NULL) printf("ERROR READING IF");
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux,llist);
@@ -415,16 +438,19 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
         | MULT ABRE ID VIRG ID FECHA {
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) {
-            printf("ERROR READING MULTIPLICATION\n");
-            exit(EXIT_FAILURE);
-        }
+        if (llist == NULL) printf("ERROR READING MULT");
 
         llist->line.v1 = $3;
         llist->line.v2 = $5;  
         llist->line.cmd = CODE_MULT;
         $$ = llist;
     }
+    
+        | NEWLINE{ 
+        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+        if (llist == NULL) printf("ERROR READING NEWLINE");
+        llist->line.cmd = CODE_SPACE;
+        }
 
 %%
 

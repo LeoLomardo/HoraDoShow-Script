@@ -1,5 +1,6 @@
 #include <stdio.h>
-
+#include <stdlib.h>
+#include <string.h>
 typedef struct line{
     short cmd;
     char *v1;
@@ -30,15 +31,10 @@ void addLLISTstart(LLIST *newC, LLIST *llist){
     newC->prox = llist;
 }
 
-int existsInList(char *var, LLIST *llist) {
-    LLIST *temp = llist;
-
-    while (temp != NULL) {
-        if (temp->line.v1 != NULL && strcmp(temp->line.v1, var) == 0) {
-            return 1; // Encontrou a variável na lista
-        }
-        temp = temp->prox;
+int existsInBuffer(char *buffer, char *var) {
+    if (strstr(buffer, var) != NULL) {
+        return 1; 
     }
 
-    return 0; // Variável não encontrada na lista
+    return 0 ;
 }

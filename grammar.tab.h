@@ -56,31 +56,29 @@ extern int yydebug;
     YYUNDEF = 257,                 /* "invalid token"  */
     RECEBA = 258,                  /* RECEBA  */
     DEVOLVA = 259,                 /* DEVOLVA  */
-    FIM = 260,                     /* FIM  */
-    ENQUANTO = 261,                /* ENQUANTO  */
-    FACA = 262,                    /* FACA  */
-    AQUIACABOU = 263,              /* AQUIACABOU  */
-    HORADOSHOW = 264,              /* HORADOSHOW  */
-    ZERO = 265,                    /* ZERO  */
-    ABRE = 266,                    /* ABRE  */
-    FIMSE = 267,                   /* FIMSE  */
-    EXECUTE = 268,                 /* EXECUTE  */
-    FIMEXE = 269,                  /* FIMEXE  */
-    FECHA = 270,                   /* FECHA  */
-    IGUAL = 271,                   /* IGUAL  */
-    GT = 272,                      /* GT  */
-    LT = 273,                      /* LT  */
-    GE = 274,                      /* GE  */
-    LE = 275,                      /* LE  */
-    ENTAO = 276,                   /* ENTAO  */
-    SOMA = 277,                    /* SOMA  */
-    ID = 278,                      /* ID  */
-    VEZES = 279,                   /* VEZES  */
-    SE = 280,                      /* SE  */
-    SENAO = 281,                   /* SENAO  */
-    MULT = 282,                    /* MULT  */
-    FIMENQUANTO = 283,             /* FIMENQUANTO  */
-    VIRG = 284                     /* VIRG  */
+    ENQUANTO = 260,                /* ENQUANTO  */
+    FACA = 261,                    /* FACA  */
+    AQUIACABOU = 262,              /* AQUIACABOU  */
+    HORADOSHOW = 263,              /* HORADOSHOW  */
+    ZERO = 264,                    /* ZERO  */
+    ABRE = 265,                    /* ABRE  */
+    FIMSE = 266,                   /* FIMSE  */
+    EXECUTE = 267,                 /* EXECUTE  */
+    FECHA = 268,                   /* FECHA  */
+    IGUAL = 269,                   /* IGUAL  */
+    GT = 270,                      /* GT  */
+    LT = 271,                      /* LT  */
+    GE = 272,                      /* GE  */
+    LE = 273,                      /* LE  */
+    ENTAO = 274,                   /* ENTAO  */
+    SOMA = 275,                    /* SOMA  */
+    ID = 276,                      /* ID  */
+    SE = 277,                      /* SE  */
+    SENAO = 278,                   /* SENAO  */
+    MULT = 279,                    /* MULT  */
+    FIMENQUANTO = 280,             /* FIMENQUANTO  */
+    VIRG = 281,                    /* VIRG  */
+    NEWLINE = 282                  /* NEWLINE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,13 +87,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 187 "grammar.y"
+#line 196 "grammar.y"
 
     int var;
     char *content;
     struct llist *llistvar;
 
-#line 99 "grammar.tab.h"
+#line 97 "grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
