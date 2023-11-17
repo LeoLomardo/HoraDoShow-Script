@@ -1,6 +1,9 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+
+extern char *buffer;
+
 typedef struct line{
     short cmd;
     char *v1;
@@ -26,15 +29,28 @@ void addLLISTend(LLIST *newC, LLIST *llist){
 }
 
 void addLLISTstart(LLIST *newC, LLIST *llist){
-
     llist->ant = newC;
     newC->prox = llist;
 }
 
-int existsInBuffer(char *buffer, char *var) {
-    if (strstr(buffer, var) != NULL) {
-        return 1; 
+int existsInBuffer( char *var) {
+    char *bufferCopy = strdup(buffer);
+    if (bufferCopy == NULL) {
+        printf("Buffer vazio.\n");
+        return 0;
     }
 
-    return 0 ;
+    char *result = strstr(bufferCopy, var);
+
+
+    if (result != NULL) {
+        printf("Substring encontrada: %s\n", result);
+        free(bufferCopy);
+        return 1;
+    } else {
+        printf("Substring nao encontrada.\n");
+        free(bufferCopy);
+        return 0;
+    }
 }
+

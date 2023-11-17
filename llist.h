@@ -5,4 +5,4 @@
 
 void addLLISTend(LLIST *newC, LLIST *llist);
 void addLLISTstart(LLIST *newC, LLIST *llist);
-int existsInBuffer(char *buffer, char *var);
+int existsInBuffer( char *var);
