@@ -99,7 +99,6 @@ extern int yylex();
 extern FILE *yyin;
 extern int yyparse();
 FILE *cFile;
-char *globalReturn;
 char *auxiliarGeral;
 char *nomeAquivo = "exemplo1.c";
 
@@ -131,36 +130,43 @@ void cWriter(LLIST *llist){
                 fprintf(cFile, "\t\n");
                 break;
             }
+
             /* CASE ZERO(ID) ID = 0; */
             case CODE_OPR_ZERO: {
                 fprintf(cFile, "\t%s = 0;\n", llist->line.v1);
                 break;
             }
+
             /* CASE MULT(ID) ID = ID * ID; */
             case CODE_MULT: {
-                fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+               fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE EQUAL ID = ID; */
             case CODE_EQUAL: {
                 fprintf(cFile, "\t%s = %s;\n",llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE SOMA(ID) ID = ID + ID; */
             case CODE_OPR_ADD: {
                 fprintf(cFile, "\t%s = %s + %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE END ADD "}" TO END CONDITIONALS OR PROGRAM; */
             case CODE_END: {
-                fprintf(cFile, "\t}\n");
+                fprintf(cFile, "\n\t}\n");
                 break;
             }
+
             /* CASE WHILE "WHILE(ID >0);" */
             case CODE_WHILE: {
-                fprintf(cFile, "\twhile (%s > 0) {\n", llist->line.v1);
+                fprintf(cFile, "\twhile (%s > 0) {\n\n", llist->line.v1);
                 break;
             }
+
             /* CASE FUNCTION OR ENTRY, START VARIABLES */
             case CODE_FUNCTION: {
                 buffer2 =strdup(llist->line.v1);
@@ -176,84 +182,86 @@ void cWriter(LLIST *llist){
                     v1 = strtok(NULL, ",");
                 }
 
-
-
                 v1 = strtok(NULL, ",");
                 while (v1 != NULL ) {
                     fprintf(cFile, "\tunsigned int %s;\n", v1);
                     v1 = strtok(NULL, ",");
                 }
-                
                 break;
             }
 
             /* CASE EXIT, RETURN VALUE OF SELECTED VARIABLE */
             case CODE_EXIT: {
+
                 while(*(buffer2) !='.' ){
                     buffer2++;
                 }
                 buffer2++;
                 char *v1 = strtok(buffer2, ",");
 
-                
                 while (v1 != NULL ) {
-                    fprintf(cFile, "\tprintf(\"DEVOLVA [%s]: %%d\", %s);\n", v1,v1);
+                    fprintf(cFile, "\n\tprintf(\"DEVOLVA [%s]: %%d\", %s);\n\n", v1,v1);
                     v1 = strtok(NULL, ",");
                 }
 
                 fprintf(cFile,"\treturn 0;\n}");
                 break;
             }
+
             /* CASE CONDITIONAL SE */
             case CODE_IF: {
-                fprintf(cFile,"\tif (%s != 0) {\n", llist->line.v1);
+                fprintf(cFile,"\n\tif (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
+
             /* CASE CONDTIONAL SE NAO */
             case CODE_IF_NOT: {
-                fprintf(cFile, "\t} else {\n");
+                fprintf(cFile, "\n\t} else {\n\n");
                 break;
             }
+
             /* CASE FOR */
-            case CODE_REPEAT: {
-                fprintf(cFile, "\tfor (int i = 0; i < %s; i++) {\n", llist->line.v1 );
+            case CODE_REPEAT: {    
+                fprintf(cFile, "\tfor (int i = 0; i < %s; i++) {\n\n", llist->line.v1 );   
                 break;
             }
+
             /* CASE MAIOR IGUAL */
             case CODE_MAIOR_IGUAL: {
-                fprintf(cFile, "\twhile(%s => %s){\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\twhile(%s >= %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
+
             /* CASE MAIOR QUE */
             case CODE_MAIOR: {
-                fprintf(cFile, "\twhile(%s > %s){\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\twhile(%s > %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
+
             /* CASE MENOR_IGUAL */
             case CODE_MENOR_IGUAL: {
-                fprintf(cFile, "\twhile(%s <= %s){\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\twhile(%s <= %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
+
             /* CASE MENOR QUE */
             case CODE_MENOR: {
-                fprintf(cFile, "\twhile(%s < %s){\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\twhile(%s < %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
+            /* CASE ID IGUAL ID NOVO */
             case CODE_ID_NOVO: {
                 fprintf(cFile, "\tunsigned int %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
-
         }
-
         llist = llist->prox;
-
     }
     fclose(cFile);
 }
 
 
-#line 257 "grammar.tab.c"
+#line 265 "grammar.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -313,7 +321,8 @@ enum yysymbol_kind_t
   YYSYMBOL_program = 29,                   /* program  */
   YYSYMBOL_varlist = 30,                   /* varlist  */
   YYSYMBOL_cmds = 31,                      /* cmds  */
-  YYSYMBOL_cmd = 32                        /* cmd  */
+  YYSYMBOL_cmd = 32,                       /* cmd  */
+  YYSYMBOL_expr = 33                       /* expr  */
 };
 typedef enum yysymbol_kind_t yysymbol_kind_t;
 
@@ -641,16 +650,16 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   203
+#define YYLAST   157
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  28
 /* YYNNTS -- Number of nonterminals.  */
-#define YYNNTS  5
+#define YYNNTS  6
 /* YYNRULES -- Number of rules.  */
-#define YYNRULES  20
+#define YYNRULES  21
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  91
+#define YYNSTATES  83
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   282
@@ -702,9 +711,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   226,   226,   245,   261,   285,   287,   289,   305,   324,
-     342,   359,   376,   394,   408,   434,   452,   470,   492,   501,
-     512
+       0,   235,   235,   254,   267,   284,   288,   291,   306,   320,
+     340,   352,   379,   395,   411,   431,   440,   451,   458,   468,
+     478,   488
 };
 #endif
 
@@ -724,7 +733,7 @@ static const char *const yytname[] =
   "ENQUANTO", "FACA", "AQUIACABOU", "HORADOSHOW", "ZERO", "ABRE", "FIMSE",
   "EXECUTE", "FECHA", "IGUAL", "GT", "LT", "GE", "LE", "ENTAO", "SOMA",
   "ID", "SE", "SENAO", "MULT", "FIMENQUANTO", "VIRG", "NEWLINE", "$accept",
-  "program", "varlist", "cmds", "cmd", YY_NULLPTR
+  "program", "varlist", "cmds", "cmd", "expr", YY_NULLPTR
 };
 
 static const char *
@@ -734,7 +743,7 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 }
 #endif
 
-#define YYPACT_NINF (-37)
+#define YYPACT_NINF (-39)
 
 #define yypact_value_is_default(Yyn) \
   ((Yyn) == YYPACT_NINF)
@@ -748,16 +757,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
    STATE-NUM.  */
 static const yytype_int16 yypact[] =
 {
-       1,   -15,     7,   -37,    -1,   -37,   -15,    -8,    -7,   -37,
-     155,   182,     4,     5,     8,     3,     9,    16,   -37,    27,
-     -37,    19,    23,    28,    30,    31,    20,    29,    35,   169,
-      33,    36,   -37,   -37,    37,    39,    40,    42,   155,    55,
-      43,    47,     3,   -37,   155,    52,    53,    56,    59,    60,
-      50,   -37,   155,    66,     0,    67,    68,    78,    79,    80,
-     -37,    71,    89,   -37,   155,    90,    97,   100,   101,   102,
-     -37,   -37,    85,   -37,    75,   110,   111,   121,   -37,   155,
-     155,   155,   155,    99,   113,   127,   141,   -37,   -37,   -37,
-     -37
+       3,    -9,    13,   -39,     0,   -39,    -9,    -7,    -3,   -39,
+     109,   136,     5,     6,    14,    15,     7,    17,   -39,    32,
+     -39,    21,    22,    25,    26,    34,    36,    24,    27,    28,
+     123,    31,    39,   -39,   -39,    40,    41,    42,    43,   109,
+     109,    30,    48,    49,    15,   -39,   109,    50,    51,    52,
+      53,    57,    46,    60,   -39,   109,    67,    -2,    68,    70,
+      71,    74,    75,   -39,   -39,    81,    84,   -39,   109,    85,
+      86,    96,    97,    98,   -39,   -39,    95,   -39,   -39,   -39,
+     -39,   -39,   -39
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -766,27 +774,26 @@ static const yytype_int16 yypact[] =
 static const yytype_int8 yydefact[] =
 {
        0,     0,     0,     4,     0,     1,     0,     0,     0,     3,
-       0,     0,     0,     0,     0,     0,     0,     0,    20,     0,
+       0,     0,     0,     0,     0,     0,     0,     0,    17,     0,
        6,     0,     0,     0,     0,     0,     0,     0,     0,     0,
-       0,     0,     2,     5,     0,     0,     0,     0,     0,     0,
-       0,     0,    14,     8,     0,     0,     0,     0,     0,     0,
-       0,    18,     0,     0,     0,     0,     0,     0,     0,     0,
-       7,     0,     0,    16,     0,     0,     0,     0,     0,     0,
-      15,    13,     0,    19,     0,     0,     0,     0,    17,     0,
-       0,     0,     0,     0,     0,     0,     0,    12,     9,    11,
-      10
+       0,     0,     0,     2,     5,     0,     0,     0,     0,     0,
+       0,     0,     0,     0,    11,     9,     0,     0,     0,     0,
+       0,     0,     0,     0,    15,     0,     0,     0,     0,     0,
+       0,     0,     0,     7,     8,     0,     0,    13,     0,     0,
+       0,     0,     0,     0,    12,    10,     0,    16,    18,    20,
+      19,    21,    14
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -37,   -37,   122,   -36,   -19
+     -39,   -39,   106,   -38,   -19,   -39
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
 static const yytype_int8 yydefgoto[] =
 {
-       0,     2,     4,    19,    20
+       0,     2,     4,    19,    20,    26
 };
 
 /* YYTABLE[YYPACT[STATE-NUM]] -- What to do in state STATE-NUM.  If
@@ -794,52 +801,42 @@ static const yytype_int8 yydefgoto[] =
    number is the opposite.  If YYTABLE_NINF, syntax error.  */
 static const yytype_int8 yytable[] =
 {
-      33,    10,    50,     6,     1,    11,     3,     5,    54,    12,
-      43,    63,    13,     9,    26,    27,    61,    29,    28,     7,
-      14,    15,    16,    64,    17,     7,    31,    18,    72,    34,
-      30,    33,    11,    35,    32,    33,    12,    38,    36,    13,
-      37,    39,    33,    83,    84,    85,    86,    14,    15,    16,
-      40,    17,    44,    33,    18,    11,    41,    45,    46,    12,
-      47,    48,    13,    49,    33,    33,    33,    33,    51,    52,
-      14,    15,    16,    53,    17,    60,    11,    18,    55,    56,
-      12,    79,    57,    13,    70,    58,    59,    62,    65,    66,
-      11,    14,    15,    16,    12,    17,    78,    13,    18,    67,
-      68,    69,    71,    73,    11,    14,    15,    16,    12,    17,
-      74,    13,    18,    75,    76,    77,    80,    81,    11,    14,
-      15,    16,    12,    17,    87,    13,    18,    82,     8,     0,
-       0,     0,    11,    14,    15,    16,    12,    17,    88,    13,
-      18,     0,     0,     0,     0,     0,    11,    14,    15,    16,
-      12,    17,    89,    13,    18,     0,     0,     0,     0,     0,
-      11,    14,    15,    16,    12,    17,    90,    13,    18,     0,
-       0,     0,     0,     0,    11,    14,    15,    16,    12,    17,
-       0,    13,    18,     0,     0,     0,     0,     0,     0,    14,
-      42,    16,     0,    17,     0,     0,    18,    21,    22,    23,
-      24,     0,     0,    25
+      34,    52,    53,    11,     6,    10,     1,    12,    57,    67,
+      13,    45,     3,     5,     9,    27,    28,    65,    14,    15,
+      16,    68,    17,     7,    29,    18,     7,    32,    31,    30,
+      76,    35,    36,    34,    34,    37,    38,    11,    34,    33,
+      39,    12,    40,    54,    13,    41,    34,     0,    42,    43,
+      46,    11,    14,    15,    16,    12,    17,    34,    13,    18,
+      47,    48,    49,    50,    51,    11,    14,    15,    16,    12,
+      17,    63,    13,    18,    55,    56,    58,    59,    60,    61,
+      14,    15,    16,    62,    17,    64,    11,    18,    66,    69,
+      12,    70,    71,    13,    74,    72,    73,    75,    77,    78,
+      11,    14,    15,    16,    12,    17,    82,    13,    18,    79,
+      80,    81,     8,     0,    11,    14,    15,    16,    12,    17,
+       0,    13,    18,     0,     0,     0,     0,     0,    11,    14,
+      15,    16,    12,    17,     0,    13,    18,     0,     0,     0,
+       0,     0,     0,    14,    44,    16,     0,    17,     0,     0,
+      18,    21,    22,    23,    24,     0,     0,    25
 };
 
 static const yytype_int8 yycheck[] =
 {
-      19,     8,    38,     4,     3,     5,    21,     0,    44,     9,
-      29,    11,    12,    21,    10,    10,    52,    14,    10,    26,
-      20,    21,    22,    23,    24,    26,    10,    27,    64,    10,
-      21,    50,     5,    10,     7,    54,     9,     6,    10,    12,
-      10,    21,    61,    79,    80,    81,    82,    20,    21,    22,
-      21,    24,    19,    72,    27,     5,    21,    21,    21,     9,
-      21,    21,    12,    21,    83,    84,    85,    86,    13,    26,
-      20,    21,    22,    26,    24,    25,     5,    27,    26,    26,
-       9,     6,    26,    12,    13,    26,    26,    21,    21,    21,
-       5,    20,    21,    22,     9,    24,    11,    12,    27,    21,
-      21,    21,    13,    13,     5,    20,    21,    22,     9,    24,
-      13,    12,    27,    13,    13,    13,     6,     6,     5,    20,
-      21,    22,     9,    24,    25,    12,    27,     6,     6,    -1,
-      -1,    -1,     5,    20,    21,    22,     9,    24,    25,    12,
-      27,    -1,    -1,    -1,    -1,    -1,     5,    20,    21,    22,
-       9,    24,    25,    12,    27,    -1,    -1,    -1,    -1,    -1,
-       5,    20,    21,    22,     9,    24,    25,    12,    27,    -1,
-      -1,    -1,    -1,    -1,     5,    20,    21,    22,     9,    24,
-      -1,    12,    27,    -1,    -1,    -1,    -1,    -1,    -1,    20,
-      21,    22,    -1,    24,    -1,    -1,    27,    15,    16,    17,
-      18,    -1,    -1,    21
+      19,    39,    40,     5,     4,     8,     3,     9,    46,    11,
+      12,    30,    21,     0,    21,    10,    10,    55,    20,    21,
+      22,    23,    24,    26,    10,    27,    26,    10,    21,    14,
+      68,    10,    10,    52,    53,    10,    10,     5,    57,     7,
+       6,     9,     6,    13,    12,    21,    65,    -1,    21,    21,
+      19,     5,    20,    21,    22,     9,    24,    76,    12,    27,
+      21,    21,    21,    21,    21,     5,    20,    21,    22,     9,
+      24,    25,    12,    27,    26,    26,    26,    26,    26,    26,
+      20,    21,    22,    26,    24,    25,     5,    27,    21,    21,
+       9,    21,    21,    12,    13,    21,    21,    13,    13,    13,
+       5,    20,    21,    22,     9,    24,    11,    12,    27,    13,
+      13,    13,     6,    -1,     5,    20,    21,    22,     9,    24,
+      -1,    12,    27,    -1,    -1,    -1,    -1,    -1,     5,    20,
+      21,    22,     9,    24,    -1,    12,    27,    -1,    -1,    -1,
+      -1,    -1,    -1,    20,    21,    22,    -1,    24,    -1,    -1,
+      27,    15,    16,    17,    18,    -1,    -1,    21
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -848,30 +845,29 @@ static const yytype_int8 yystos[] =
 {
        0,     3,    29,    21,    30,     0,     4,    26,    30,    21,
        8,     5,     9,    12,    20,    21,    22,    24,    27,    31,
-      32,    15,    16,    17,    18,    21,    10,    10,    10,    14,
-      21,    10,     7,    32,    10,    10,    10,    10,     6,    21,
-      21,    21,    21,    32,    19,    21,    21,    21,    21,    21,
-      31,    13,    26,    26,    31,    26,    26,    26,    26,    26,
-      25,    31,    21,    11,    23,    21,    21,    21,    21,    21,
-      13,    13,    31,    13,    13,    13,    13,    13,    11,     6,
-       6,     6,     6,    31,    31,    31,    31,    25,    25,    25,
-      25
+      32,    15,    16,    17,    18,    21,    33,    10,    10,    10,
+      14,    21,    10,     7,    32,    10,    10,    10,    10,     6,
+       6,    21,    21,    21,    21,    32,    19,    21,    21,    21,
+      21,    21,    31,    31,    13,    26,    26,    31,    26,    26,
+      26,    26,    26,    25,    25,    31,    21,    11,    23,    21,
+      21,    21,    21,    21,    13,    13,    31,    13,    13,    13,
+      13,    13,    11
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr1[] =
 {
        0,    28,    29,    30,    30,    31,    31,    32,    32,    32,
-      32,    32,    32,    32,    32,    32,    32,    32,    32,    32,
-      32
+      32,    32,    32,    32,    32,    32,    32,    32,    33,    33,
+      33,    33
 };
 
 /* YYR2[RULE-NUM] -- Number of symbols on the right-hand side of rule RULE-NUM.  */
 static const yytype_int8 yyr2[] =
 {
-       0,     2,     7,     3,     1,     2,     1,     5,     3,    10,
-      10,    10,    10,     6,     3,     6,     5,     7,     4,     6,
-       1
+       0,     2,     7,     3,     1,     2,     1,     5,     5,     3,
+       6,     3,     6,     5,     7,     4,     6,     1,     6,     6,
+       6,     6
 };
 
 
@@ -1335,112 +1331,120 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: RECEBA varlist DEVOLVA varlist HORADOSHOW cmds AQUIACABOU  */
-#line 226 "grammar.y"
-                                                                    {
-    LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-    if (llist == NULL) printf("ERROR READING PROGRAM FUNCTION ENTRY\n");
+#line 235 "grammar.y"
+                                                                      {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING PROGRAM FUNCTION ENTRY\n");
 
-    llist->line.v1 = (yyvsp[-5].content);
-    llist->line.v2 = (yyvsp[-3].content);
-    llist->line.cmd = CODE_FUNCTION;
-    addLLISTstart(llist, (yyvsp[-1].llistvar));
+            llist->line.v1 = (yyvsp[-5].content);
+            llist->line.v2 = (yyvsp[-3].content);
+            llist->line.cmd = CODE_FUNCTION;
+            addLLISTstart(llist, (yyvsp[-1].llistvar));
 
-    LLIST *aux = (LLIST *)malloc(sizeof(LLIST));
-    if (aux == NULL) printf("ERROR READING PROGRAM EXIT ENTRY\n");
+            LLIST *aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING PROGRAM EXIT ENTRY\n");
 
-    aux->line.v1 = (yyvsp[-3].content);
-    aux->line.cmd = CODE_EXIT;
-    addLLISTend(aux, llist);
+            aux->line.v1 = (yyvsp[-3].content);
+            aux->line.cmd = CODE_EXIT;
+            addLLISTend(aux, llist);
 
-    cWriter(llist);
-}
-#line 1358 "grammar.tab.c"
+            cWriter(llist);
+        }
+#line 1354 "grammar.tab.c"
     break;
 
   case 3: /* varlist: varlist VIRG ID  */
-#line 245 "grammar.y"
+#line 254 "grammar.y"
                           {
-    if (buffer == NULL) {
-        buffer = strdup((yyvsp[0].content));
+            if (buffer == NULL) {
+                buffer = strdup((yyvsp[0].content));
+            } else {
+                size_t new_size = strlen(buffer) + strlen((yyvsp[0].content)) + 2;  
+                buffer = realloc(buffer, new_size);
+                strcat(buffer, ",");
+                strcat(buffer, (yyvsp[0].content));
 
-    } else {
-        size_t new_size = strlen(buffer) + strlen((yyvsp[0].content)) + 2;  
-        buffer = realloc(buffer, new_size);
-        strcat(buffer, ",");
-        strcat(buffer, (yyvsp[0].content));
-
-    }
-    
-    (yyval.content) = buffer;
-    
-}
-#line 1378 "grammar.tab.c"
+            }
+            (yyval.content) = buffer;
+        }
+#line 1371 "grammar.tab.c"
     break;
 
   case 4: /* varlist: ID  */
-#line 261 "grammar.y"
-     {
-    
-    if (buffer == NULL) {
-        buffer = strdup((yyvsp[0].content));
-        (yyval.content) = (yyvsp[0].content);
-
-    } else {
-        size_t new_size = strlen(buffer) +  2;  
-        buffer = realloc(buffer, new_size);
-        strcat(buffer, ",.");
-        size_t new_size2 = strlen(buffer) + strlen((yyvsp[0].content)) + 2;  
-        buffer = realloc(buffer, new_size2);
-        strcat(buffer, ",");
-        strcat(buffer, (yyvsp[0].content));
-        
-    }
-
-    
-    (yyval.content) = buffer;
-
-
-}
-#line 1405 "grammar.tab.c"
+#line 267 "grammar.y"
+             {
+            if (buffer == NULL) {
+                buffer = strdup((yyvsp[0].content));
+                (yyval.content) = (yyvsp[0].content);
+            } else {
+                size_t new_size = strlen(buffer) +  2;  
+                buffer = realloc(buffer, new_size);
+                strcat(buffer, ",.");
+                size_t new_size2 = strlen(buffer) + strlen((yyvsp[0].content)) + 2;  
+                buffer = realloc(buffer, new_size2);
+                strcat(buffer, ",");
+                strcat(buffer, (yyvsp[0].content));
+            }
+            (yyval.content) = buffer;
+        }
+#line 1391 "grammar.tab.c"
     break;
 
   case 5: /* cmds: cmds cmd  */
-#line 285 "grammar.y"
-                        { addLLISTend((yyvsp[0].llistvar), (yyvsp[-1].llistvar)); (yyval.llistvar) = (yyvsp[-1].llistvar); }
-#line 1411 "grammar.tab.c"
+#line 284 "grammar.y"
+                 { 
+            addLLISTend((yyvsp[0].llistvar), (yyvsp[-1].llistvar)); (yyval.llistvar) = (yyvsp[-1].llistvar); 
+        }
+#line 1399 "grammar.tab.c"
     break;
 
   case 6: /* cmds: cmd  */
-#line 287 "grammar.y"
-              { (yyval.llistvar) = (yyvsp[0].llistvar);}
-#line 1417 "grammar.tab.c"
+#line 288 "grammar.y"
+              { (yyval.llistvar) = (yyvsp[0].llistvar);
+        }
+#line 1406 "grammar.tab.c"
     break;
 
   case 7: /* cmd: ENQUANTO ID FACA cmds FIMENQUANTO  */
-#line 289 "grammar.y"
-                                              {
+#line 291 "grammar.y"
+                                          {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.cmd = CODE_WHILE;
+            addLLISTend((yyvsp[-1].llistvar), llist);
 
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END ENQUANTO");
 
-        llist->line.v1 = (yyvsp[-3].content);
-        llist->line.cmd = CODE_WHILE;
-        addLLISTend((yyvsp[-1].llistvar), llist);
-
-        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENQUANTO");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux, llist);
-        (yyval.llistvar) = llist;
-    }
-#line 1438 "grammar.tab.c"
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux, llist);
+            (yyval.llistvar) = llist;
+        }
+#line 1425 "grammar.tab.c"
     break;
 
-  case 8: /* cmd: ID IGUAL cmd  */
-#line 305 "grammar.y"
-                       {
+  case 8: /* cmd: ENQUANTO expr FACA cmds FIMENQUANTO  */
+#line 306 "grammar.y"
+                                                {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+            addLLISTend((yyvsp[-3].llistvar), llist); 
+            addLLISTend((yyvsp[-1].llistvar), llist); 
 
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END ENQUANTO");
+            
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux, llist);
+            (yyval.llistvar) = llist;
+        }
+#line 1443 "grammar.tab.c"
+    break;
+
+  case 9: /* cmd: ID IGUAL cmd  */
+#line 320 "grammar.y"
+                       {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
 
@@ -1457,118 +1461,28 @@ yyreduce:
             addLLISTend(aux, llist);
             
             (yyval.llistvar) = llist;
-    }
-#line 1462 "grammar.tab.c"
+        }
+#line 1466 "grammar.tab.c"
     break;
 
-  case 9: /* cmd: ENQUANTO LT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 324 "grammar.y"
-                                                                 {
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
-
-        llist->line.v1 = (yyvsp[-6].content);
-        llist->line.v2 = (yyvsp[-4].content);
-        llist->line.cmd = CODE_MENOR;
-        addLLISTend((yyvsp[-1].llistvar), llist);
-
-        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENQUANTO");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux, llist);
-
-        (yyval.llistvar) = llist;
-
-    }
-#line 1485 "grammar.tab.c"
-    break;
-
-  case 10: /* cmd: ENQUANTO LE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 342 "grammar.y"
-                                                                 {
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
-
-        llist->line.v1 = (yyvsp[-6].content);
-        llist->line.v2 = (yyvsp[-4].content);
-        llist->line.cmd = CODE_MENOR_IGUAL;
-        addLLISTend((yyvsp[-1].llistvar), llist);
-
-        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENQUANTO");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux, llist);
-        (yyval.llistvar) = llist;
-
-    }
-#line 1507 "grammar.tab.c"
-    break;
-
-  case 11: /* cmd: ENQUANTO GE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 359 "grammar.y"
-                                                                 {
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
-
-        llist->line.v1 = (yyvsp[-6].content);
-        llist->line.v2 = (yyvsp[-4].content);
-        llist->line.cmd = CODE_MAIOR_IGUAL;
-        addLLISTend((yyvsp[-1].llistvar), llist);
-
-        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENQUANTO");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux, llist);
-        (yyval.llistvar) = llist;
-
-    }
-#line 1529 "grammar.tab.c"
-    break;
-
-  case 12: /* cmd: ENQUANTO GT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 376 "grammar.y"
-                                                                 {
-        LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
-
-        llist->line.v1 = (yyvsp[-6].content);
-        llist->line.v2 = (yyvsp[-4].content);
-        llist->line.cmd = CODE_MAIOR;
-        addLLISTend((yyvsp[-1].llistvar), llist);
-
-        LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING END ENQUANTO");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux, llist);
-        (yyval.llistvar) = llist;
-
-    }
-#line 1551 "grammar.tab.c"
-    break;
-
-  case 13: /* cmd: SOMA ABRE ID VIRG ID FECHA  */
-#line 394 "grammar.y"
+  case 10: /* cmd: SOMA ABRE ID VIRG ID FECHA  */
+#line 340 "grammar.y"
                                      {
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
 
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_OPR_ADD;
 
-        llist->line.v1 = (yyvsp[-3].content);
-        llist->line.v2 = (yyvsp[-1].content);
-        llist->line.cmd = CODE_OPR_ADD;
-
-        auxiliarGeral = (yyvsp[-3].content);
-        (yyval.llistvar) = llist;
-}
-#line 1568 "grammar.tab.c"
+            auxiliarGeral = (yyvsp[-3].content);
+            (yyval.llistvar) = llist;
+        }
+#line 1482 "grammar.tab.c"
     break;
 
-  case 14: /* cmd: ID IGUAL ID  */
-#line 408 "grammar.y"
+  case 11: /* cmd: ID IGUAL ID  */
+#line 352 "grammar.y"
                       {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
@@ -1593,121 +1507,172 @@ yyreduce:
                 llist->line.cmd = CODE_EQUAL;
                 
             }
-        (yyval.llistvar) = llist;
+            (yyval.llistvar) = llist;
         }
-#line 1599 "grammar.tab.c"
+#line 1513 "grammar.tab.c"
     break;
 
-  case 15: /* cmd: EXECUTE ABRE ID VIRG cmds FECHA  */
-#line 434 "grammar.y"
+  case 12: /* cmd: EXECUTE ABRE ID VIRG cmds FECHA  */
+#line 379 "grammar.y"
                                           {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING LOOP");
 
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING LOOP");
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.cmd = CODE_REPEAT;
+            addLLISTend((yyvsp[-1].llistvar),llist);
 
-        llist->line.v1 = (yyvsp[-3].content);
-        llist->line.cmd = CODE_REPEAT;
-        addLLISTend((yyvsp[-1].llistvar),llist);
+            LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING LOOP");
 
-        LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING LOOP");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux,llist);
-        (yyval.llistvar) = llist;
-        
-    }
-#line 1621 "grammar.tab.c"
-    break;
-
-  case 16: /* cmd: SE ID ENTAO cmds FIMSE  */
-#line 452 "grammar.y"
-                                 {
-
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING IF");
-
-        llist->line.v1 = (yyvsp[-3].content);
-        llist->line.cmd = CODE_IF;
-        addLLISTend((yyvsp[-1].llistvar),llist);
-
-        LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING IF");
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux,llist);
-        (yyval.llistvar) = llist;
-
-    }
-#line 1643 "grammar.tab.c"
-    break;
-
-  case 17: /* cmd: SE ID ENTAO cmds SENAO cmds FIMSE  */
-#line 470 "grammar.y"
-                                            {
-        
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING IF IF NOT");
-
-        llist->line.v1 = (yyvsp[-5].content);
-        llist->line.cmd = CODE_IF;
-        addLLISTend((yyvsp[-3].llistvar),llist);
-
-        LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
-        if (aux == NULL) printf("ERROR READING IFNOT ");
-
-        aux->line.cmd = CODE_IF_NOT;
-        addLLISTend(aux,llist);
-        addLLISTend((yyvsp[-1].llistvar),llist);
-
-        aux->line.cmd = CODE_END;
-        addLLISTend(aux,llist);
-
-        (yyval.llistvar) = llist;
-    }
-#line 1669 "grammar.tab.c"
-    break;
-
-  case 18: /* cmd: ZERO ABRE ID FECHA  */
-#line 492 "grammar.y"
-                             {
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING ZERO");
-
-        llist->line.v1 = (yyvsp[-1].content);
-        llist->line.cmd = CODE_OPR_ZERO;
-        (yyval.llistvar) = llist;
-    }
-#line 1682 "grammar.tab.c"
-    break;
-
-  case 19: /* cmd: MULT ABRE ID VIRG ID FECHA  */
-#line 501 "grammar.y"
-                                     {
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING MULT");
-
-        llist->line.v1 = (yyvsp[-3].content);
-        llist->line.v2 = (yyvsp[-1].content);  
-        llist->line.cmd = CODE_MULT;
-        auxiliarGeral = (yyvsp[-3].content);
-        (yyval.llistvar) = llist;
-    }
-#line 1697 "grammar.tab.c"
-    break;
-
-  case 20: /* cmd: NEWLINE  */
-#line 512 "grammar.y"
-                 { 
-        LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
-        if (llist == NULL) printf("ERROR READING NEWLINE");
-        llist->line.cmd = CODE_SPACE;
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux,llist);
+            (yyval.llistvar) = llist;
         }
-#line 1707 "grammar.tab.c"
+#line 1533 "grammar.tab.c"
+    break;
+
+  case 13: /* cmd: SE ID ENTAO cmds FIMSE  */
+#line 395 "grammar.y"
+                                 {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IF");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.cmd = CODE_IF;
+            addLLISTend((yyvsp[-1].llistvar),llist);
+
+            LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING IF");
+
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux,llist);
+            (yyval.llistvar) = llist;
+        }
+#line 1553 "grammar.tab.c"
+    break;
+
+  case 14: /* cmd: SE ID ENTAO cmds SENAO cmds FIMSE  */
+#line 411 "grammar.y"
+                                            {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IF IF NOT");
+
+            llist->line.v1 = (yyvsp[-5].content);
+            llist->line.cmd = CODE_IF;
+            addLLISTend((yyvsp[-3].llistvar),llist);
+
+            LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING IFNOT ");
+
+            aux->line.cmd = CODE_IF_NOT;
+            addLLISTend(aux,llist);
+            addLLISTend((yyvsp[-1].llistvar),llist);
+
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux,llist);
+            (yyval.llistvar) = llist;
+        }
+#line 1577 "grammar.tab.c"
+    break;
+
+  case 15: /* cmd: ZERO ABRE ID FECHA  */
+#line 431 "grammar.y"
+                             {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING ZERO");
+
+            llist->line.v1 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_OPR_ZERO;
+            (yyval.llistvar) = llist;
+        }
+#line 1590 "grammar.tab.c"
+    break;
+
+  case 16: /* cmd: MULT ABRE ID VIRG ID FECHA  */
+#line 440 "grammar.y"
+                                     {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING MULT");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);  
+            llist->line.cmd = CODE_MULT;
+            auxiliarGeral = (yyvsp[-3].content);
+            (yyval.llistvar) = llist;
+        }
+#line 1605 "grammar.tab.c"
+    break;
+
+  case 17: /* cmd: NEWLINE  */
+#line 451 "grammar.y"
+                 { 
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING NEWLINE");
+
+            llist->line.cmd = CODE_SPACE;
+        }
+#line 1616 "grammar.tab.c"
+    break;
+
+  case 18: /* expr: GT ABRE ID VIRG ID FECHA  */
+#line 458 "grammar.y"
+                                 {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_MAIOR;
+            (yyval.llistvar) = llist;
+        }
+#line 1630 "grammar.tab.c"
+    break;
+
+  case 19: /* expr: GE ABRE ID VIRG ID FECHA  */
+#line 468 "grammar.y"
+                                   {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_MAIOR_IGUAL;
+            (yyval.llistvar) = llist;
+        }
+#line 1644 "grammar.tab.c"
+    break;
+
+  case 20: /* expr: LT ABRE ID VIRG ID FECHA  */
+#line 478 "grammar.y"
+                                   {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_MENOR;
+            (yyval.llistvar) = llist;
+        }
+#line 1658 "grammar.tab.c"
+    break;
+
+  case 21: /* expr: LE ABRE ID VIRG ID FECHA  */
+#line 488 "grammar.y"
+                                   {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+
+            llist->line.v1 = (yyvsp[-3].content);
+            llist->line.v2 = (yyvsp[-1].content);
+            llist->line.cmd = CODE_MENOR_IGUAL;
+            (yyval.llistvar) = llist;
+        }
+#line 1672 "grammar.tab.c"
     break;
 
 
-#line 1711 "grammar.tab.c"
+#line 1676 "grammar.tab.c"
 
       default: break;
     }
@@ -1900,7 +1865,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 519 "grammar.y"
+#line 498 "grammar.y"
 
 
 int main(int argc, char **argv){
