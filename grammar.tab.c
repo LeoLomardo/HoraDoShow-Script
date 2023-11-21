@@ -189,7 +189,6 @@ void cWriter(LLIST *llist){
 
             /* CASE EXIT, RETURN VALUE OF SELECTED VARIABLE */
             case CODE_EXIT: {
-                printf("V111111111111111111:  %s\n",buffer2);
                 while(*(buffer2) !='.' ){
                     buffer2++;
                 }
@@ -254,7 +253,7 @@ void cWriter(LLIST *llist){
 }
 
 
-#line 258 "grammar.tab.c"
+#line 257 "grammar.tab.c"
 
 # ifndef YY_CAST
 #  ifdef __cplusplus
@@ -642,7 +641,7 @@ union yyalloc
 /* YYFINAL -- State number of the termination state.  */
 #define YYFINAL  5
 /* YYLAST -- Last index in YYTABLE.  */
-#define YYLAST   201
+#define YYLAST   203
 
 /* YYNTOKENS -- Number of terminals.  */
 #define YYNTOKENS  28
@@ -651,7 +650,7 @@ union yyalloc
 /* YYNRULES -- Number of rules.  */
 #define YYNRULES  20
 /* YYNSTATES -- Number of states.  */
-#define YYNSTATES  92
+#define YYNSTATES  91
 
 /* YYMAXUTOK -- Last valid token kind.  */
 #define YYMAXUTOK   282
@@ -703,9 +702,9 @@ static const yytype_int8 yytranslate[] =
 /* YYRLINE[YYN] -- Source line where rule number YYN was defined.  */
 static const yytype_int16 yyrline[] =
 {
-       0,   227,   227,   246,   262,   286,   288,   290,   306,   325,
-     343,   360,   377,   395,   409,   435,   453,   471,   493,   502,
-     513
+       0,   226,   226,   245,   261,   285,   287,   289,   305,   324,
+     342,   359,   376,   394,   408,   434,   452,   470,   492,   501,
+     512
 };
 #endif
 
@@ -750,15 +749,15 @@ yysymbol_name (yysymbol_kind_t yysymbol)
 static const yytype_int16 yypact[] =
 {
        1,   -15,     7,   -37,    -1,   -37,   -15,    -8,    -7,   -37,
-     153,   180,     4,     5,     8,     3,     9,    16,   -37,    49,
-     -37,    18,    19,    22,    24,    32,    20,    26,    30,   167,
-      38,    39,   -37,   -37,    41,    42,    43,    51,   153,    62,
-      13,    53,     3,   -37,   153,    54,    57,    58,    59,    60,
-      28,   -37,   153,    56,     0,    66,    76,    77,    78,    79,
-     -37,    69,    88,   -37,    89,    98,    99,   100,   101,   102,
-     -37,   -37,   153,   -37,   119,   120,   121,   122,    83,   153,
-     153,   153,   153,   -37,    97,   111,   125,   139,   -37,   -37,
-     -37,   -37
+     155,   182,     4,     5,     8,     3,     9,    16,   -37,    27,
+     -37,    19,    23,    28,    30,    31,    20,    29,    35,   169,
+      33,    36,   -37,   -37,    37,    39,    40,    42,   155,    55,
+      43,    47,     3,   -37,   155,    52,    53,    56,    59,    60,
+      50,   -37,   155,    66,     0,    67,    68,    78,    79,    80,
+     -37,    71,    89,   -37,   155,    90,    97,   100,   101,   102,
+     -37,   -37,    85,   -37,    75,   110,   111,   121,   -37,   155,
+     155,   155,   155,    99,   113,   127,   141,   -37,   -37,   -37,
+     -37
 };
 
 /* YYDEFACT[STATE-NUM] -- Default reduction number in state STATE-NUM.
@@ -773,15 +772,15 @@ static const yytype_int8 yydefact[] =
        0,     0,    14,     8,     0,     0,     0,     0,     0,     0,
        0,    18,     0,     0,     0,     0,     0,     0,     0,     0,
        7,     0,     0,    16,     0,     0,     0,     0,     0,     0,
-      15,    13,     0,    19,     0,     0,     0,     0,     0,     0,
-       0,     0,     0,    17,     0,     0,     0,     0,    12,     9,
-      11,    10
+      15,    13,     0,    19,     0,     0,     0,     0,    17,     0,
+       0,     0,     0,     0,     0,     0,     0,    12,     9,    11,
+      10
 };
 
 /* YYPGOTO[NTERM-NUM].  */
 static const yytype_int8 yypgoto[] =
 {
-     -37,   -37,   123,   -36,   -19
+     -37,   -37,   122,   -36,   -19
 };
 
 /* YYDEFGOTO[NTERM-NUM].  */
@@ -797,50 +796,50 @@ static const yytype_int8 yytable[] =
 {
       33,    10,    50,     6,     1,    11,     3,     5,    54,    12,
       43,    63,    13,     9,    26,    27,    61,    29,    28,     7,
-      14,    15,    16,    64,    17,     7,    31,    18,    34,    35,
-      30,    33,    36,    11,    37,    33,    78,    12,    38,    52,
-      13,    39,    33,    84,    85,    86,    87,    40,    14,    15,
-      16,    41,    17,    60,    11,    18,    32,    44,    12,    33,
-      45,    13,    46,    47,    48,    33,    33,    33,    33,    14,
-      15,    16,    49,    17,    11,    51,    18,    62,    12,    53,
-      55,    13,    70,    56,    57,    58,    59,    65,    11,    14,
-      15,    16,    12,    17,    83,    13,    18,    66,    67,    68,
-      69,    71,    11,    14,    15,    16,    12,    17,    72,    13,
-      18,    73,    74,    75,    76,    77,    11,    14,    15,    16,
-      12,    17,    88,    13,    18,    79,    80,    81,    82,     8,
-      11,    14,    15,    16,    12,    17,    89,    13,    18,     0,
+      14,    15,    16,    64,    17,     7,    31,    18,    72,    34,
+      30,    33,    11,    35,    32,    33,    12,    38,    36,    13,
+      37,    39,    33,    83,    84,    85,    86,    14,    15,    16,
+      40,    17,    44,    33,    18,    11,    41,    45,    46,    12,
+      47,    48,    13,    49,    33,    33,    33,    33,    51,    52,
+      14,    15,    16,    53,    17,    60,    11,    18,    55,    56,
+      12,    79,    57,    13,    70,    58,    59,    62,    65,    66,
+      11,    14,    15,    16,    12,    17,    78,    13,    18,    67,
+      68,    69,    71,    73,    11,    14,    15,    16,    12,    17,
+      74,    13,    18,    75,    76,    77,    80,    81,    11,    14,
+      15,    16,    12,    17,    87,    13,    18,    82,     8,     0,
+       0,     0,    11,    14,    15,    16,    12,    17,    88,    13,
+      18,     0,     0,     0,     0,     0,    11,    14,    15,    16,
+      12,    17,    89,    13,    18,     0,     0,     0,     0,     0,
+      11,    14,    15,    16,    12,    17,    90,    13,    18,     0,
        0,     0,     0,     0,    11,    14,    15,    16,    12,    17,
-      90,    13,    18,     0,     0,     0,     0,     0,    11,    14,
-      15,    16,    12,    17,    91,    13,    18,     0,     0,     0,
-       0,     0,    11,    14,    15,    16,    12,    17,     0,    13,
-      18,     0,     0,     0,     0,     0,     0,    14,    42,    16,
-       0,    17,     0,     0,    18,    21,    22,    23,    24,     0,
-       0,    25
+       0,    13,    18,     0,     0,     0,     0,     0,     0,    14,
+      42,    16,     0,    17,     0,     0,    18,    21,    22,    23,
+      24,     0,     0,    25
 };
 
 static const yytype_int8 yycheck[] =
 {
       19,     8,    38,     4,     3,     5,    21,     0,    44,     9,
       29,    11,    12,    21,    10,    10,    52,    14,    10,    26,
-      20,    21,    22,    23,    24,    26,    10,    27,    10,    10,
-      21,    50,    10,     5,    10,    54,    72,     9,     6,    26,
-      12,    21,    61,    79,    80,    81,    82,    21,    20,    21,
-      22,    21,    24,    25,     5,    27,     7,    19,     9,    78,
-      21,    12,    21,    21,    21,    84,    85,    86,    87,    20,
-      21,    22,    21,    24,     5,    13,    27,    21,     9,    26,
-      26,    12,    13,    26,    26,    26,    26,    21,     5,    20,
-      21,    22,     9,    24,    11,    12,    27,    21,    21,    21,
-      21,    13,     5,    20,    21,    22,     9,    24,    19,    12,
-      27,    13,    13,    13,    13,    13,     5,    20,    21,    22,
-       9,    24,    25,    12,    27,     6,     6,     6,     6,     6,
+      20,    21,    22,    23,    24,    26,    10,    27,    64,    10,
+      21,    50,     5,    10,     7,    54,     9,     6,    10,    12,
+      10,    21,    61,    79,    80,    81,    82,    20,    21,    22,
+      21,    24,    19,    72,    27,     5,    21,    21,    21,     9,
+      21,    21,    12,    21,    83,    84,    85,    86,    13,    26,
+      20,    21,    22,    26,    24,    25,     5,    27,    26,    26,
+       9,     6,    26,    12,    13,    26,    26,    21,    21,    21,
+       5,    20,    21,    22,     9,    24,    11,    12,    27,    21,
+      21,    21,    13,    13,     5,    20,    21,    22,     9,    24,
+      13,    12,    27,    13,    13,    13,     6,     6,     5,    20,
+      21,    22,     9,    24,    25,    12,    27,     6,     6,    -1,
+      -1,    -1,     5,    20,    21,    22,     9,    24,    25,    12,
+      27,    -1,    -1,    -1,    -1,    -1,     5,    20,    21,    22,
+       9,    24,    25,    12,    27,    -1,    -1,    -1,    -1,    -1,
        5,    20,    21,    22,     9,    24,    25,    12,    27,    -1,
       -1,    -1,    -1,    -1,     5,    20,    21,    22,     9,    24,
-      25,    12,    27,    -1,    -1,    -1,    -1,    -1,     5,    20,
-      21,    22,     9,    24,    25,    12,    27,    -1,    -1,    -1,
-      -1,    -1,     5,    20,    21,    22,     9,    24,    -1,    12,
-      27,    -1,    -1,    -1,    -1,    -1,    -1,    20,    21,    22,
-      -1,    24,    -1,    -1,    27,    15,    16,    17,    18,    -1,
-      -1,    21
+      -1,    12,    27,    -1,    -1,    -1,    -1,    -1,    -1,    20,
+      21,    22,    -1,    24,    -1,    -1,    27,    15,    16,    17,
+      18,    -1,    -1,    21
 };
 
 /* YYSTOS[STATE-NUM] -- The symbol kind of the accessing symbol of
@@ -854,9 +853,9 @@ static const yytype_int8 yystos[] =
       21,    21,    21,    32,    19,    21,    21,    21,    21,    21,
       31,    13,    26,    26,    31,    26,    26,    26,    26,    26,
       25,    31,    21,    11,    23,    21,    21,    21,    21,    21,
-      13,    13,    19,    13,    13,    13,    13,    13,    31,     6,
-       6,     6,     6,    11,    31,    31,    31,    31,    25,    25,
-      25,    25
+      13,    13,    31,    13,    13,    13,    13,    13,    11,     6,
+       6,     6,     6,    31,    31,    31,    31,    25,    25,    25,
+      25
 };
 
 /* YYR1[RULE-NUM] -- Symbol kind of the left-hand side of rule RULE-NUM.  */
@@ -871,7 +870,7 @@ static const yytype_int8 yyr1[] =
 static const yytype_int8 yyr2[] =
 {
        0,     2,     7,     3,     1,     2,     1,     5,     3,    10,
-      10,    10,    10,     6,     3,     6,     5,     8,     4,     6,
+      10,    10,    10,     6,     3,     6,     5,     7,     4,     6,
        1
 };
 
@@ -1336,7 +1335,7 @@ yyreduce:
   switch (yyn)
     {
   case 2: /* program: RECEBA varlist DEVOLVA varlist HORADOSHOW cmds AQUIACABOU  */
-#line 227 "grammar.y"
+#line 226 "grammar.y"
                                                                     {
     LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
     if (llist == NULL) printf("ERROR READING PROGRAM FUNCTION ENTRY\n");
@@ -1355,11 +1354,11 @@ yyreduce:
 
     cWriter(llist);
 }
-#line 1359 "grammar.tab.c"
+#line 1358 "grammar.tab.c"
     break;
 
   case 3: /* varlist: varlist VIRG ID  */
-#line 246 "grammar.y"
+#line 245 "grammar.y"
                           {
     if (buffer == NULL) {
         buffer = strdup((yyvsp[0].content));
@@ -1375,11 +1374,11 @@ yyreduce:
     (yyval.content) = buffer;
     
 }
-#line 1379 "grammar.tab.c"
+#line 1378 "grammar.tab.c"
     break;
 
   case 4: /* varlist: ID  */
-#line 262 "grammar.y"
+#line 261 "grammar.y"
      {
     
     if (buffer == NULL) {
@@ -1402,23 +1401,23 @@ yyreduce:
 
 
 }
-#line 1406 "grammar.tab.c"
+#line 1405 "grammar.tab.c"
     break;
 
   case 5: /* cmds: cmds cmd  */
-#line 286 "grammar.y"
+#line 285 "grammar.y"
                         { addLLISTend((yyvsp[0].llistvar), (yyvsp[-1].llistvar)); (yyval.llistvar) = (yyvsp[-1].llistvar); }
-#line 1412 "grammar.tab.c"
+#line 1411 "grammar.tab.c"
     break;
 
   case 6: /* cmds: cmd  */
-#line 288 "grammar.y"
+#line 287 "grammar.y"
               { (yyval.llistvar) = (yyvsp[0].llistvar);}
-#line 1418 "grammar.tab.c"
+#line 1417 "grammar.tab.c"
     break;
 
   case 7: /* cmd: ENQUANTO ID FACA cmds FIMENQUANTO  */
-#line 290 "grammar.y"
+#line 289 "grammar.y"
                                               {
 
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
@@ -1435,11 +1434,11 @@ yyreduce:
         addLLISTend(aux, llist);
         (yyval.llistvar) = llist;
     }
-#line 1439 "grammar.tab.c"
+#line 1438 "grammar.tab.c"
     break;
 
   case 8: /* cmd: ID IGUAL cmd  */
-#line 306 "grammar.y"
+#line 305 "grammar.y"
                        {
 
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
@@ -1459,11 +1458,11 @@ yyreduce:
             
             (yyval.llistvar) = llist;
     }
-#line 1463 "grammar.tab.c"
+#line 1462 "grammar.tab.c"
     break;
 
   case 9: /* cmd: ENQUANTO LT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 325 "grammar.y"
+#line 324 "grammar.y"
                                                                  {
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
@@ -1482,11 +1481,11 @@ yyreduce:
         (yyval.llistvar) = llist;
 
     }
-#line 1486 "grammar.tab.c"
+#line 1485 "grammar.tab.c"
     break;
 
   case 10: /* cmd: ENQUANTO LE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 343 "grammar.y"
+#line 342 "grammar.y"
                                                                  {
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
@@ -1504,11 +1503,11 @@ yyreduce:
         (yyval.llistvar) = llist;
 
     }
-#line 1508 "grammar.tab.c"
+#line 1507 "grammar.tab.c"
     break;
 
   case 11: /* cmd: ENQUANTO GE ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 360 "grammar.y"
+#line 359 "grammar.y"
                                                                  {
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
@@ -1526,11 +1525,11 @@ yyreduce:
         (yyval.llistvar) = llist;
 
     }
-#line 1530 "grammar.tab.c"
+#line 1529 "grammar.tab.c"
     break;
 
   case 12: /* cmd: ENQUANTO GT ABRE ID VIRG ID FECHA FACA cmds FIMENQUANTO  */
-#line 377 "grammar.y"
+#line 376 "grammar.y"
                                                                  {
         LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
@@ -1548,11 +1547,11 @@ yyreduce:
         (yyval.llistvar) = llist;
 
     }
-#line 1552 "grammar.tab.c"
+#line 1551 "grammar.tab.c"
     break;
 
   case 13: /* cmd: SOMA ABRE ID VIRG ID FECHA  */
-#line 395 "grammar.y"
+#line 394 "grammar.y"
                                      {
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
@@ -1565,11 +1564,11 @@ yyreduce:
         auxiliarGeral = (yyvsp[-3].content);
         (yyval.llistvar) = llist;
 }
-#line 1569 "grammar.tab.c"
+#line 1568 "grammar.tab.c"
     break;
 
   case 14: /* cmd: ID IGUAL ID  */
-#line 409 "grammar.y"
+#line 408 "grammar.y"
                       {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
@@ -1596,11 +1595,11 @@ yyreduce:
             }
         (yyval.llistvar) = llist;
         }
-#line 1600 "grammar.tab.c"
+#line 1599 "grammar.tab.c"
     break;
 
   case 15: /* cmd: EXECUTE ABRE ID VIRG cmds FECHA  */
-#line 435 "grammar.y"
+#line 434 "grammar.y"
                                           {
 
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
@@ -1618,11 +1617,11 @@ yyreduce:
         (yyval.llistvar) = llist;
         
     }
-#line 1622 "grammar.tab.c"
+#line 1621 "grammar.tab.c"
     break;
 
   case 16: /* cmd: SE ID ENTAO cmds FIMSE  */
-#line 453 "grammar.y"
+#line 452 "grammar.y"
                                  {
 
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
@@ -1640,19 +1639,19 @@ yyreduce:
         (yyval.llistvar) = llist;
 
     }
-#line 1644 "grammar.tab.c"
+#line 1643 "grammar.tab.c"
     break;
 
-  case 17: /* cmd: SE ID ENTAO cmds SENAO ENTAO cmds FIMSE  */
-#line 471 "grammar.y"
-                                                  {
+  case 17: /* cmd: SE ID ENTAO cmds SENAO cmds FIMSE  */
+#line 470 "grammar.y"
+                                            {
         
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING IF IF NOT");
 
-        llist->line.v1 = (yyvsp[-6].content);
+        llist->line.v1 = (yyvsp[-5].content);
         llist->line.cmd = CODE_IF;
-        addLLISTend((yyvsp[-4].llistvar),llist);
+        addLLISTend((yyvsp[-3].llistvar),llist);
 
         LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
         if (aux == NULL) printf("ERROR READING IFNOT ");
@@ -1666,11 +1665,11 @@ yyreduce:
 
         (yyval.llistvar) = llist;
     }
-#line 1670 "grammar.tab.c"
+#line 1669 "grammar.tab.c"
     break;
 
   case 18: /* cmd: ZERO ABRE ID FECHA  */
-#line 493 "grammar.y"
+#line 492 "grammar.y"
                              {
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING ZERO");
@@ -1679,11 +1678,11 @@ yyreduce:
         llist->line.cmd = CODE_OPR_ZERO;
         (yyval.llistvar) = llist;
     }
-#line 1683 "grammar.tab.c"
+#line 1682 "grammar.tab.c"
     break;
 
   case 19: /* cmd: MULT ABRE ID VIRG ID FECHA  */
-#line 502 "grammar.y"
+#line 501 "grammar.y"
                                      {
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING MULT");
@@ -1694,21 +1693,21 @@ yyreduce:
         auxiliarGeral = (yyvsp[-3].content);
         (yyval.llistvar) = llist;
     }
-#line 1698 "grammar.tab.c"
+#line 1697 "grammar.tab.c"
     break;
 
   case 20: /* cmd: NEWLINE  */
-#line 513 "grammar.y"
+#line 512 "grammar.y"
                  { 
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING NEWLINE");
         llist->line.cmd = CODE_SPACE;
         }
-#line 1708 "grammar.tab.c"
+#line 1707 "grammar.tab.c"
     break;
 
 
-#line 1712 "grammar.tab.c"
+#line 1711 "grammar.tab.c"
 
       default: break;
     }
@@ -1901,7 +1900,7 @@ yyreturnlab:
   return yyresult;
 }
 
-#line 520 "grammar.y"
+#line 519 "grammar.y"
 
 
 int main(int argc, char **argv){

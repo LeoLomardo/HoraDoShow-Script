@@ -119,7 +119,6 @@ void cWriter(LLIST *llist){
 
             /* CASE EXIT, RETURN VALUE OF SELECTED VARIABLE */
             case CODE_EXIT: {
-                printf("V111111111111111111:  %s\n",buffer2);
                 while(*(buffer2) !='.' ){
                     buffer2++;
                 }
@@ -468,7 +467,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
     }
 
-        | SE ID ENTAO cmds SENAO ENTAO cmds FIMSE {
+        | SE ID ENTAO cmds SENAO cmds FIMSE {
         
         LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
         if (llist == NULL) printf("ERROR READING IF IF NOT");
@@ -482,7 +481,7 @@ cmd     :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
         aux->line.cmd = CODE_IF_NOT;
         addLLISTend(aux,llist);
-        addLLISTend($7,llist);
+        addLLISTend($6,llist);
 
         aux->line.cmd = CODE_END;
         addLLISTend(aux,llist);
