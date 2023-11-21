@@ -22,6 +22,8 @@ ENTAO       { return ENTAO; }
 SENAO       { return SENAO; }
 SOMA        { return SOMA;}
 MULT        { return MULT;}
+DIV        { return DIV;}
+SUB         { return SUB;}
 GT          { return GT; }
 LT          { return LT; }
 GE          { return GE; }

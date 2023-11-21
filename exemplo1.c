@@ -1,23 +1,22 @@
 #include <stdio.h> 
  
 int main(void) { 
-	unsigned int X;
+	int X;
 	printf("RECEBA [X]: ");
 	scanf("%d", &X); 
  
- 	unsigned int XX;
+ 	int XX;
 	printf("RECEBA [XX]: ");
 	scanf("%d", &XX); 
  
- 	unsigned int Z;
-	unsigned int NUM;
+ 	int Z;
+	int NUM;
 	NUM = 0;
-	X = 0;
-	unsigned int RESULT;
+	int RESULT;
 	RESULT = 1;
-	while(X >= NUM){
+	while (RESULT != 0) {
 
-	NUM = NUM * 1;
+	RESULT = RESULT / 1 ;
 	Z = RESULT;
 
 	}

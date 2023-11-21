@@ -14,13 +14,15 @@
 #define CODE_REPEAT 7
 #define CODE_IF 8
 #define CODE_IF_NOT 9
-#define CODE_MULT 11
+#define CODE_OPR_MULT 11
 #define CODE_MAIOR 12
 #define CODE_MAIOR_IGUAL 13
 #define CODE_MENOR 14
 #define CODE_MENOR_IGUAL 15
 #define CODE_ID_NOVO 16
 #define CODE_SPACE 17
+#define CODE_OPR_SUB 18
+#define CODE_OPR_DIV 19
 #define CODE_END -1
 
 char *buffer = NULL;
@@ -68,7 +70,7 @@ void cWriter(LLIST *llist){
             }
 
             /* CASE MULT(ID) ID = ID * ID; */
-            case CODE_MULT: {
+            case CODE_OPR_MULT: {
                fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
@@ -85,6 +87,18 @@ void cWriter(LLIST *llist){
                 break;
             }
 
+            /* CASE SUB(ID, ID2) ID = ID - ID2; */
+            case CODE_OPR_SUB: {
+                fprintf(cFile, "\t%s = %s - %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                break;
+            }
+
+            /* CASE DIV(ID, ID2) ID = ID / ID2; */
+            case CODE_OPR_DIV: {
+                fprintf(cFile, "\t%s = %s / %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                break;
+            }
+
             /* CASE END ADD "}" TO END CONDITIONALS OR PROGRAM; */
             case CODE_END: {
                 fprintf(cFile, "\n\t}\n");
@@ -93,7 +107,7 @@ void cWriter(LLIST *llist){
 
             /* CASE WHILE "WHILE(ID >0);" */
             case CODE_WHILE: {
-                fprintf(cFile, "\twhile (%s > 0) {\n\n", llist->line.v1);
+                fprintf(cFile, "\twhile (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
 
@@ -105,7 +119,7 @@ void cWriter(LLIST *llist){
                 puts(llist->line.v1);
                 
                 while (v1 != NULL && *v1 != '.') {
-                    fprintf(cFile, "\tunsigned int %s;\n", v1);
+                    fprintf(cFile, "\tint %s;\n", v1);
                     fprintf(cFile, "\tprintf(\"RECEBA [%s]: \");\n", v1);
                     fprintf(cFile, "\tscanf(\"%s\", &%s); \n", "%d", v1);
                     fprintf(cFile, " \n ");
@@ -114,7 +128,7 @@ void cWriter(LLIST *llist){
 
                 v1 = strtok(NULL, ",");
                 while (v1 != NULL ) {
-                    fprintf(cFile, "\tunsigned int %s;\n", v1);
+                    fprintf(cFile, "\tint %s;\n", v1);
                     v1 = strtok(NULL, ",");
                 }
                 break;
@@ -181,7 +195,7 @@ void cWriter(LLIST *llist){
             }
             /* CASE ID IGUAL ID NOVO */
             case CODE_ID_NOVO: {
-                fprintf(cFile, "\tunsigned int %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                fprintf(cFile, "\tint %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
         }
@@ -210,12 +224,14 @@ void cWriter(LLIST *llist){
 %token LE
 %token ENTAO
 %token SOMA
+%token SUB
 %token <content> ID
 %token SE
 %token SENAO
 %token MULT
 %token FIMENQUANTO
 %token VIRG
+%token DIV
 %token NEWLINE
 
 %union{
@@ -335,7 +351,6 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             
             $$ = llist;
         }
-
         
         | SOMA ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
@@ -344,6 +359,30 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             llist->line.v1 = $3;
             llist->line.v2 = $5;
             llist->line.cmd = CODE_OPR_ADD;
+
+            auxiliarGeral = $3;
+            $$ = llist;
+        }
+
+        | DIV ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_OPR_DIV;
+
+            auxiliarGeral = $3;
+            $$ = llist;
+        }
+
+        | SUB ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_OPR_SUB;
 
             auxiliarGeral = $3;
             $$ = llist;
@@ -443,7 +482,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
             llist->line.v1 = $3;
             llist->line.v2 = $5;  
-            llist->line.cmd = CODE_MULT;
+            llist->line.cmd = CODE_OPR_MULT;
             auxiliarGeral = $3;
             $$ = llist;
         }
