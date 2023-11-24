@@ -25,6 +25,8 @@ MULT        { return MULT;}
 DIV        { return DIV;}
 LSHIFT        { return LSHIFT;}
 RSHIFT        { return RSHIFT;}
+EQUAL        { return EQUAL;}
+DIF        { return DIF;}
 SUB         { return SUB;}
 GT          { return GT; }
 LT          { return LT; }

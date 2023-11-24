@@ -5,19 +5,14 @@ int main(void) {
 	printf("RECEBA [X]: ");
 	scanf("%d", &X); 
  
- 	int XX;
-	printf("RECEBA [XX]: ");
-	scanf("%d", &XX); 
- 
  	int Z;
+ 
+ 	X = 3;
 	Z = 0;
-	Z = Z + 10 ;
-	Z = Z;
-	for (int i = 0; i < 3; i++) {
+	while	(X != 4){
 
-	Z = Z - 1 ;
-	Z = Z - 1 ;
-	Z = Z - 1 ;
+	X = X + 1 ;
+	Z = Z + 1 ;
 
 	}
 

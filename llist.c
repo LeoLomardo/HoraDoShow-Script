@@ -18,13 +18,11 @@ typedef struct llist{
 }LLIST;
 
 void addLLISTend(LLIST *newC, LLIST *llist){
-
     LLIST *temp = llist;
 
     while (temp->prox != NULL){
         temp = temp->prox;
     }
-
     temp->prox = newC;
     newC->ant = temp;
 }
@@ -36,13 +34,12 @@ void addLLISTstart(LLIST *newC, LLIST *llist){
 
 int existsInBuffer( char *var) {
     char *bufferCopy = strdup(buffer);
+    char *result = strstr(bufferCopy, var);
+
     if (bufferCopy == NULL) {
         printf("Buffer vazio.\n");
         return 0;
     }
-
-    char *result = strstr(bufferCopy, var);
-
 
     if (result != NULL) {
         printf("Substring encontrada: %s\n", result);

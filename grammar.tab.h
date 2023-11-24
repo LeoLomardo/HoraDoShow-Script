@@ -82,7 +82,9 @@ extern int yydebug;
     FIMENQUANTO = 283,             /* FIMENQUANTO  */
     VIRG = 284,                    /* VIRG  */
     DIV = 285,                     /* DIV  */
-    NEWLINE = 286                  /* NEWLINE  */
+    DIF = 286,                     /* DIF  */
+    EQUAL = 287,                   /* EQUAL  */
+    NEWLINE = 288                  /* NEWLINE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -91,13 +93,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 262 "grammar.y"
+#line 277 "grammar.y"
 
     int var;
     char *content;
     struct llist *llistvar;
 
-#line 101 "grammar.tab.h"
+#line 103 "grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

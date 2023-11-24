@@ -27,6 +27,8 @@
 #define CODE_WHILE_GL 21
 #define CODE_RSHIFT 22
 #define CODE_LSHIFT 23
+#define CODE_ABSOLUTE_EQUAL 24
+#define CODE_ABSOLUTE_DIF 25
 #define CODE_END -1
 
 char *buffer = NULL;
@@ -140,6 +142,7 @@ void cWriter(LLIST *llist){
                     fprintf(cFile, "\tint %s;\n", v1);
                     v1 = strtok(NULL, ",");
                 }
+                fprintf(cFile, " \n ");
                 break;
             }
 
@@ -206,6 +209,16 @@ void cWriter(LLIST *llist){
                 fprintf(cFile, "\t(%s < %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
+            /* CASE ABSOLUTE EQUAL */
+            case CODE_ABSOLUTE_EQUAL: {
+                fprintf(cFile, "\t(%s == %s){\n\n", llist->line.v1,llist->line.v2);
+                break;
+            }
+            /* CASE ABSOLUTE DIF */
+            case CODE_ABSOLUTE_DIF: {
+                fprintf(cFile, "\t(%s != %s){\n\n", llist->line.v1,llist->line.v2);
+                break;
+            }
             /* CASE ID IGUAL ID NOVO */
             case CODE_ID_NOVO: {
                 fprintf(cFile, "\tint %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
@@ -257,6 +270,8 @@ void cWriter(LLIST *llist){
 %token FIMENQUANTO
 %token VIRG
 %token DIV
+%token DIF
+%token EQUAL
 %token NEWLINE
 
 %union{
@@ -510,8 +525,8 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             $$ = llist;
         }
 
-         | SE ID ENTAO cmds SENAO cmds FIMSE {
-        
+        | SE ID ENTAO cmds SENAO cmds FIMSE {
+    
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IF IF NOT");
 
@@ -534,6 +549,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
 
             $$ = llist;
         }
+
         | SE expr ENTAO cmds SENAO cmds FIMSE {
         
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
@@ -594,7 +610,15 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_MAIOR;
             $$ = llist;
         }
+        | EQUAL ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
 
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_ABSOLUTE_EQUAL;
+            $$ = llist;
+        }
         | GE ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
@@ -614,7 +638,15 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_MENOR;
             $$ = llist;
         }
+        | DIF ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
 
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_ABSOLUTE_DIF;
+            $$ = llist;
+        }
         | LE ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
