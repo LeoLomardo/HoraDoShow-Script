@@ -113,12 +113,12 @@ void cWriter(LLIST *llist){
 
             /* CASE WHILE "WHILE(ID >0);" */
             case CODE_WHILE: {
-                fprintf(cFile, "\twhile (%s != 0) {\n\n", llist->line.v1);
+                fprintf(cFile, "\n\twhile (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
              /* CASE WHILE "WHILE(expr);" */
             case CODE_WHILE_GL: {
-                fprintf(cFile, "\twhile");
+                fprintf(cFile, "\n\twhile");
                 break;
             }
 
@@ -182,7 +182,7 @@ void cWriter(LLIST *llist){
 
             /* CASE FOR */
             case CODE_REPEAT: {    
-                fprintf(cFile, "\tfor (int i = 0; i < %s; i++) {\n\n", llist->line.v1 );   
+                fprintf(cFile, "\n\tfor (int i = 0; i < %s; i++) {\n\n", llist->line.v1 );   
                 break;
             }
 
