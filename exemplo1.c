@@ -9,15 +9,23 @@ int main(void) {
 	printf("RECEBA [XX]: ");
 	scanf("%d", &XX); 
  
+ 	int A;
+	printf("RECEBA [A]: ");
+	scanf("%d", &A); 
+ 
  	int Z;
-	int NUM;
-	NUM = 0;
-	int RESULT;
-	RESULT = 1;
-	while (RESULT != 0) {
+	X = 0;
+	X = X << 10 ;
+	Z = X;
 
-	RESULT = RESULT / 1 ;
-	Z = RESULT;
+	if	(X > 3){
+
+	Z = Z - 4 ;
+	Z = Z;
+
+	} else {
+
+	Z = 0;
 
 	}
 

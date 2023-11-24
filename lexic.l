@@ -23,6 +23,8 @@ SENAO       { return SENAO; }
 SOMA        { return SOMA;}
 MULT        { return MULT;}
 DIV        { return DIV;}
+LSHIFT        { return LSHIFT;}
+RSHIFT        { return RSHIFT;}
 SUB         { return SUB;}
 GT          { return GT; }
 LT          { return LT; }

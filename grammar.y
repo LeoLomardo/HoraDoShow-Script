@@ -23,6 +23,10 @@
 #define CODE_SPACE 17
 #define CODE_OPR_SUB 18
 #define CODE_OPR_DIV 19
+#define CODE_IF_GL 20
+#define CODE_WHILE_GL 21
+#define CODE_RSHIFT 22
+#define CODE_LSHIFT 23
 #define CODE_END -1
 
 char *buffer = NULL;
@@ -110,6 +114,11 @@ void cWriter(LLIST *llist){
                 fprintf(cFile, "\twhile (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
+             /* CASE WHILE "WHILE(expr);" */
+            case CODE_WHILE_GL: {
+                fprintf(cFile, "\twhile");
+                break;
+            }
 
             /* CASE FUNCTION OR ENTRY, START VARIABLES */
             case CODE_FUNCTION: {
@@ -157,7 +166,11 @@ void cWriter(LLIST *llist){
                 fprintf(cFile,"\n\tif (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
-
+             /* CASE CONDITIONAL SE_GL */
+            case CODE_IF_GL: {
+                fprintf(cFile,"\n\tif");
+                break;
+            }
             /* CASE CONDTIONAL SE NAO */
             case CODE_IF_NOT: {
                 fprintf(cFile, "\n\t} else {\n\n");
@@ -172,30 +185,40 @@ void cWriter(LLIST *llist){
 
             /* CASE MAIOR IGUAL */
             case CODE_MAIOR_IGUAL: {
-                fprintf(cFile, "\twhile(%s >= %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\(%s >= %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
 
             /* CASE MAIOR QUE */
             case CODE_MAIOR: {
-                fprintf(cFile, "\twhile(%s > %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s > %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
 
             /* CASE MENOR_IGUAL */
             case CODE_MENOR_IGUAL: {
-                fprintf(cFile, "\twhile(%s <= %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\(%s <= %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
 
             /* CASE MENOR QUE */
             case CODE_MENOR: {
-                fprintf(cFile, "\twhile(%s < %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s < %s){\n\n", llist->line.v1,llist->line.v2);
                 break;
             }
             /* CASE ID IGUAL ID NOVO */
             case CODE_ID_NOVO: {
                 fprintf(cFile, "\tint %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                break;
+            }
+            /* CASE SHIFT BIT ESQUERDA */
+            case CODE_LSHIFT: {
+                fprintf(cFile, "\t%s = %s << %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                break;
+            }
+            /* CASE SHIFT BIT DIREITA */
+            case CODE_RSHIFT: {
+                fprintf(cFile, "\t%s = %s >> %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
         }
@@ -219,6 +242,8 @@ void cWriter(LLIST *llist){
 %token FECHA
 %token IGUAL
 %token GT
+%token LSHIFT
+%token RSHIFT
 %token LT
 %token GE
 %token LE
@@ -306,7 +331,7 @@ cmds :  cmds cmd {
 
 cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
-            if (llist == NULL) printf("ERROR READGING COMMAND ENQUANTO");
+            if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
             llist->line.v1 = $2;
             llist->line.cmd = CODE_WHILE;
             addLLISTend($4, llist);
@@ -322,6 +347,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
         | ENQUANTO  expr  FACA cmds FIMENQUANTO {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
+            llist->line.cmd = CODE_WHILE_GL;
             addLLISTend($2, llist); 
             addLLISTend($4, llist); 
 
@@ -364,6 +390,28 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             $$ = llist;
         }
 
+        | RSHIFT ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_RSHIFT;
+
+            auxiliarGeral = $3;
+            $$ = llist;
+        }
+        | LSHIFT ABRE ID VIRG ID FECHA {
+            LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
+
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.cmd = CODE_LSHIFT;
+
+            auxiliarGeral = $3;
+            $$ = llist;
+        }
         | DIV ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
@@ -446,24 +494,67 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             addLLISTend(aux,llist);
             $$ = llist;
         }
+        
+        | SE expr ENTAO cmds FIMSE {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND IF");
+            llist->line.cmd = CODE_IF_GL;
+            addLLISTend($2,llist);
+	        addLLISTend($4, llist); 
 
-        | SE ID ENTAO cmds SENAO cmds FIMSE {
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END IF");
+            
+            aux->line.cmd = CODE_END;
+            addLLISTend(aux, llist);
+            $$ = llist;
+        }
+
+         | SE ID ENTAO cmds SENAO cmds FIMSE {
+        
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IF IF NOT");
 
             llist->line.v1 = $2;
             llist->line.cmd = CODE_IF;
             addLLISTend($4,llist);
-
+            
             LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
             if (aux == NULL) printf("ERROR READING IFNOT ");
-
+            
             aux->line.cmd = CODE_IF_NOT;
+            
             addLLISTend(aux,llist);
             addLLISTend($6,llist);
 
-            aux->line.cmd = CODE_END;
+            LLIST *aux2 = (LLIST*)malloc(sizeof(LLIST));
+            if (aux2 == NULL) printf("ERROR READING IFNOT ");
+            aux2->line.cmd = CODE_END;
+            addLLISTend(aux2,llist);
+
+            $$ = llist;
+        }
+        | SE expr ENTAO cmds SENAO cmds FIMSE {
+        
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING COMMAND IF");
+            llist->line.cmd = CODE_IF_GL;
+            addLLISTend($2,llist);
+	        addLLISTend($4, llist); 
+            
+            LLIST *aux = (LLIST*)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING IFNOT ");
+            
+            aux->line.cmd = CODE_IF_NOT;
+            
             addLLISTend(aux,llist);
+            addLLISTend($6,llist);
+
+            LLIST *aux2 = (LLIST*)malloc(sizeof(LLIST));
+            if (aux2 == NULL) printf("ERROR READING IFNOT ");
+            aux2->line.cmd = CODE_END;
+            addLLISTend(aux2,llist);
+
             $$ = llist;
         }
 

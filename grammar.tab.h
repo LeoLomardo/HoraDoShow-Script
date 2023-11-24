@@ -67,20 +67,22 @@ extern int yydebug;
     FECHA = 268,                   /* FECHA  */
     IGUAL = 269,                   /* IGUAL  */
     GT = 270,                      /* GT  */
-    LT = 271,                      /* LT  */
-    GE = 272,                      /* GE  */
-    LE = 273,                      /* LE  */
-    ENTAO = 274,                   /* ENTAO  */
-    SOMA = 275,                    /* SOMA  */
-    SUB = 276,                     /* SUB  */
-    ID = 277,                      /* ID  */
-    SE = 278,                      /* SE  */
-    SENAO = 279,                   /* SENAO  */
-    MULT = 280,                    /* MULT  */
-    FIMENQUANTO = 281,             /* FIMENQUANTO  */
-    VIRG = 282,                    /* VIRG  */
-    DIV = 283,                     /* DIV  */
-    NEWLINE = 284                  /* NEWLINE  */
+    LSHIFT = 271,                  /* LSHIFT  */
+    RSHIFT = 272,                  /* RSHIFT  */
+    LT = 273,                      /* LT  */
+    GE = 274,                      /* GE  */
+    LE = 275,                      /* LE  */
+    ENTAO = 276,                   /* ENTAO  */
+    SOMA = 277,                    /* SOMA  */
+    SUB = 278,                     /* SUB  */
+    ID = 279,                      /* ID  */
+    SE = 280,                      /* SE  */
+    SENAO = 281,                   /* SENAO  */
+    MULT = 282,                    /* MULT  */
+    FIMENQUANTO = 283,             /* FIMENQUANTO  */
+    VIRG = 284,                    /* VIRG  */
+    DIV = 285,                     /* DIV  */
+    NEWLINE = 286                  /* NEWLINE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -89,13 +91,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 237 "grammar.y"
+#line 262 "grammar.y"
 
     int var;
     char *content;
     struct llist *llistvar;
 
-#line 99 "grammar.tab.h"
+#line 101 "grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;
