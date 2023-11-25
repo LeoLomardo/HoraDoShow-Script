@@ -5,6 +5,11 @@
 #include <errno.h>
 #include "llist.h"
 
+    /*
+        Leo Land Bairos Lomardo-2020201
+        Matheus Valejo Gomes Pereira - 2011536
+    */
+
 #define CODE_FUNCTION 1
 #define CODE_EXIT 2
 #define CODE_OPR_ADD 3
@@ -31,6 +36,7 @@
 #define CODE_ABSOLUTE_DIF 25
 #define CODE_INIT_VETOR 26
 #define CODE_VETOR_VALOR 27
+#define CODE_EQUAL_MATRIZ 28
 #define CODE_END -1
 
 
@@ -42,6 +48,7 @@ extern int yyparse();
 FILE *cFile;
 char *auxiliarGeral;
 char *nomeAquivo = "exemplo1.c";
+char contFor[2] = "a";
 
 void yyerror(const char *s){
     fprintf(stderr, "%s\n", s);
@@ -68,7 +75,7 @@ void cWriter(LLIST *llist){
         switch(llist->line.cmd){
             /* CASE SPACE; */
             case CODE_SPACE: {
-                fprintf(cFile, "\t\n");
+                fprintf(cFile, "\n");
                 break;
             }
 
@@ -80,28 +87,34 @@ void cWriter(LLIST *llist){
 
             /* CASE MULT(ID) ID = ID * ID; */
             case CODE_OPR_MULT: {
-               fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
+                fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE INIT VETOR(ID,LINHA, COLUNA) int ID[linha][coluna]; */
             case CODE_INIT_VETOR: {
-
                 if (strcmp(llist->line.v3, "0") == 0){
                     fprintf(cFile, "\tint %s[%s];\n", llist->line.v1, llist->line.v2);
-
                 }else if(strcmp(llist->line.v2, "0") == 0 && strcmp(llist->line.v3, "0") != 0) {
                     printf("Erro de sintaxe!\n");
-
                 }else{
                     fprintf(cFile, "\tint %s[%s][%s];\n", llist->line.v1, llist->line.v2, llist->line.v3);
                 }
                 break;
             }
+
             /* CASE VETOR VALOR(ID,LINHA, COLUNA, VALOR) ID[linha][coluna] = VALOR; */
             case CODE_VETOR_VALOR: {
-                fprintf(cFile, "\t%s[%s][%s] = %s;\n", llist->line.v1, llist->line.v2, llist->line.v3, llist->line.v4);
+                if (strcmp(llist->line.v3, "0") == 0){
+                    fprintf(cFile, "\t%s[%s] = %s;\n", llist->line.v1, llist->line.v2, llist->line.v4);
+                }else if(strcmp(llist->line.v2, "0") == 0 && strcmp(llist->line.v3, "0") != 0) {
+                    printf("Erro de sintaxe!\n");
+                }else{
+                    fprintf(cFile, "\t%s[%s][%s] = %s;\n", llist->line.v1, llist->line.v2, llist->line.v3, llist->line.v4);
+                }
                 break;
             }
+
             /* CASE EQUAL ID = ID; */
             case CODE_EQUAL: {
                 fprintf(cFile, "\t%s = %s;\n",llist->line.v1, llist->line.v2);
@@ -128,7 +141,7 @@ void cWriter(LLIST *llist){
 
             /* CASE END ADD "}" TO END CONDITIONALS OR PROGRAM; */
             case CODE_END: {
-                fprintf(cFile, "\n\t}\n");
+                fprintf(cFile, "\t}\n");
                 break;
             }
 
@@ -137,7 +150,8 @@ void cWriter(LLIST *llist){
                 fprintf(cFile, "\n\twhile (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
-             /* CASE WHILE "WHILE(expr);" */
+
+            /* CASE WHILE "WHILE(expr);" */
             case CODE_WHILE_GL: {
                 fprintf(cFile, "\n\twhile");
                 break;
@@ -153,7 +167,7 @@ void cWriter(LLIST *llist){
                 while (v1 != NULL && *v1 != '.') {
                     fprintf(cFile, "\tint %s;\n", v1);
                     fprintf(cFile, "\tprintf(\"RECEBA [%s]: \");\n", v1);
-                    fprintf(cFile, "\tscanf(\"%s\", &%s); \n", "%d", v1);
+                    fprintf(cFile, "\tscanf(\"%s\", &%s); \n", "%i", v1);
                     fprintf(cFile, " \n ");
                     v1 = strtok(NULL, ",");
                 }
@@ -169,7 +183,6 @@ void cWriter(LLIST *llist){
 
             /* CASE EXIT, RETURN VALUE OF SELECTED VARIABLE */
             case CODE_EXIT: {
-
                 while(*(buffer2) !='.' ){
                     buffer2++;
                 }
@@ -177,7 +190,7 @@ void cWriter(LLIST *llist){
                 char *v1 = strtok(buffer2, ",");
 
                 while (v1 != NULL ) {
-                    fprintf(cFile, "\n\tprintf(\"DEVOLVA [%s]: %%d\", %s);\n\n", v1,v1);
+                    fprintf(cFile, "\n\tprintf(\"DEVOLVA [%s]: %%d\", %s);\n\n", v1, v1);
                     v1 = strtok(NULL, ",");
                 }
 
@@ -190,11 +203,13 @@ void cWriter(LLIST *llist){
                 fprintf(cFile,"\n\tif (%s != 0) {\n\n", llist->line.v1);
                 break;
             }
-             /* CASE CONDITIONAL SE_GL */
+
+            /* CASE CONDITIONAL SE_GL */
             case CODE_IF_GL: {
                 fprintf(cFile,"\n\tif");
                 break;
             }
+
             /* CASE CONDTIONAL SE NAO */
             case CODE_IF_NOT: {
                 fprintf(cFile, "\n\t} else {\n\n");
@@ -202,54 +217,72 @@ void cWriter(LLIST *llist){
             }
 
             /* CASE FOR */
-            case CODE_REPEAT: {    
-                fprintf(cFile, "\n\tfor (int i = 0; i < %s; i++) {\n\n", llist->line.v1 );   
+            case CODE_REPEAT: {
+                fprintf(cFile, "\n\tfor (int %s = 0; %s < %s; %s++) {\n\n", contFor, contFor, llist->line.v1, contFor);
+                contFor[0]++;
                 break;
             }
 
             /* CASE MAIOR IGUAL */
             case CODE_MAIOR_IGUAL: {
-                fprintf(cFile, "\(%s >= %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\(%s >= %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
 
             /* CASE MAIOR QUE */
             case CODE_MAIOR: {
-                fprintf(cFile, "\t(%s > %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s > %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
 
             /* CASE MENOR_IGUAL */
             case CODE_MENOR_IGUAL: {
-                fprintf(cFile, "\(%s <= %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\(%s <= %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
 
             /* CASE MENOR QUE */
             case CODE_MENOR: {
-                fprintf(cFile, "\t(%s < %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s < %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE ABSOLUTE EQUAL */
             case CODE_ABSOLUTE_EQUAL: {
-                fprintf(cFile, "\t(%s == %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s == %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE ABSOLUTE DIF */
             case CODE_ABSOLUTE_DIF: {
-                fprintf(cFile, "\t(%s != %s){\n\n", llist->line.v1,llist->line.v2);
+                fprintf(cFile, "\t(%s != %s){\n\n", llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE ID IGUAL ID NOVO */
             case CODE_ID_NOVO: {
                 fprintf(cFile, "\tint %s;\n\t%s = %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+
+            /* CASE ID IGUAL ID MATRIZ */
+            case CODE_EQUAL_MATRIZ: {
+                if (strcmp(llist->line.v4, "0") == 0){
+                    fprintf(cFile, "\t %s=%s[%s];\n", llist->line.v1, llist->line.v2, llist->line.v4);
+                }else if(strcmp(llist->line.v3, "0") == 0 && strcmp(llist->line.v4, "0") != 0) {
+                    printf("Erro de sintaxe!\n");
+                }else{
+                    fprintf(cFile, "\t%s=%s[%s][%s];\n", llist->line.v1, llist->line.v2, llist->line.v3, llist->line.v4);
+                }
+                break;
+            }
+
             /* CASE SHIFT BIT ESQUERDA */
             case CODE_LSHIFT: {
                 fprintf(cFile, "\t%s = %s << %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+
             /* CASE SHIFT BIT DIREITA */
             case CODE_RSHIFT: {
                 fprintf(cFile, "\t%s = %s >> %s ;\n", llist->line.v1, llist->line.v1, llist->line.v2);
@@ -291,6 +324,7 @@ void cWriter(LLIST *llist){
 %token SENAO
 %token MULT
 %token FIMENQUANTO
+%token EQUALM
 %token VIRG
 %token DIV
 %token DIF
@@ -396,7 +430,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             addLLISTend(aux, llist);
             $$ = llist;
         }
-        
+
         | ID IGUAL cmd {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
@@ -415,6 +449,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             
             $$ = llist;
         }
+
         | VETOR ABRE ID VIRG ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
@@ -429,6 +464,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             
             $$ = llist;
         }
+
         | VALORVETOR ABRE ID VIRG ID VIRG ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING IGUAL\n");
@@ -444,6 +480,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             
             $$ = llist;
         }
+
         | SOMA ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
@@ -467,6 +504,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             auxiliarGeral = $3;
             $$ = llist;
         }
+
         | LSHIFT ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
@@ -478,6 +516,7 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             auxiliarGeral = $3;
             $$ = llist;
         }
+
         | DIV ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READGING COMMAND SOMA");
@@ -529,10 +568,26 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             $$ = llist;
         }
 
+        | EQUALM ABRE ID VIRG ID VIRG ID VIRG ID FECHA {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IGUAL\n");
+
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END ENQUANTO");
+            
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.v3 = $7;
+            llist->line.v4 = $9;
+            llist->line.cmd = CODE_EQUAL_MATRIZ;
+            
+            $$ = llist;
+        }
+
         | EXECUTE ABRE ID VIRG cmds FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING LOOP");
-
+            
             llist->line.v1 = $3;
             llist->line.cmd = CODE_REPEAT;
             addLLISTend($5,llist);
@@ -661,6 +716,7 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_MAIOR;
             $$ = llist;
         }
+
         | EQUAL ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
@@ -670,6 +726,7 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_ABSOLUTE_EQUAL;
             $$ = llist;
         }
+
         | GE ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
@@ -689,6 +746,7 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_MENOR;
             $$ = llist;
         }
+
         | DIF ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
@@ -698,6 +756,7 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_ABSOLUTE_DIF;
             $$ = llist;
         }
+
         | LE ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READING COMMAND ENQUANTO");
@@ -707,7 +766,6 @@ expr:   GT ABRE ID VIRG ID FECHA {
             llist->line.cmd = CODE_MENOR_IGUAL;
             $$ = llist;
         }
-
 %%
 
 int main(int argc, char **argv){

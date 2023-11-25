@@ -1,7 +1,10 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
-
+    /*
+        Leo Land Bairos Lomardo-2020201
+        Matheus Valejo Gomes Pereira - 2011536
+    */
 extern char *buffer;
 
 typedef struct line{

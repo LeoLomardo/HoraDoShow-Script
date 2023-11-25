@@ -3,12 +3,20 @@
 int main(void) { 
 	int X;
 	printf("RECEBA [X]: ");
-	scanf("%d", &X); 
+	scanf("%i", &X); 
+ 
+ 	int Y;
+	printf("RECEBA [Y]: ");
+	scanf("%i", &Y); 
  
  	int Z;
  
- 	int A[1];
-	A[3][2] = 100;
+ 
+	for (int a = 0; a < X; a++) {
+
+	Y = Y + 2 ;
+	}
+	Z = Y;
 
 	printf("DEVOLVA [Z]: %d", Z);
 
