@@ -7,14 +7,8 @@ int main(void) {
  
  	int Z;
  
- 	X = 3;
-	Z = 0;
-	while	(X != 4){
-
-	X = X + 1 ;
-	Z = Z + 1 ;
-
-	}
+ 	int A[1];
+	A[3][2] = 100;
 
 	printf("DEVOLVA [Z]: %d", Z);
 

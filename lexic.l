@@ -23,6 +23,8 @@ SENAO       { return SENAO; }
 SOMA        { return SOMA;}
 MULT        { return MULT;}
 DIV        { return DIV;}
+VETOR        { return VETOR;}
+VALORVETOR        { return VALORVETOR;}
 LSHIFT        { return LSHIFT;}
 RSHIFT        { return RSHIFT;}
 EQUAL        { return EQUAL;}

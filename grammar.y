@@ -29,7 +29,10 @@
 #define CODE_LSHIFT 23
 #define CODE_ABSOLUTE_EQUAL 24
 #define CODE_ABSOLUTE_DIF 25
+#define CODE_INIT_VETOR 26
+#define CODE_VETOR_VALOR 27
 #define CODE_END -1
+
 
 char *buffer = NULL;
 char *buffer2 = NULL;
@@ -80,7 +83,25 @@ void cWriter(LLIST *llist){
                fprintf(cFile, "\t%s = %s * %s;\n", llist->line.v1, llist->line.v1, llist->line.v2);
                 break;
             }
+            /* CASE INIT VETOR(ID,LINHA, COLUNA) int ID[linha][coluna]; */
+            case CODE_INIT_VETOR: {
 
+                if (strcmp(llist->line.v3, "0") == 0){
+                    fprintf(cFile, "\tint %s[%s];\n", llist->line.v1, llist->line.v2);
+
+                }else if(strcmp(llist->line.v2, "0") == 0 && strcmp(llist->line.v3, "0") != 0) {
+                    printf("Erro de sintaxe!\n");
+
+                }else{
+                    fprintf(cFile, "\tint %s[%s][%s];\n", llist->line.v1, llist->line.v2, llist->line.v3);
+                }
+                break;
+            }
+            /* CASE VETOR VALOR(ID,LINHA, COLUNA, VALOR) ID[linha][coluna] = VALOR; */
+            case CODE_VETOR_VALOR: {
+                fprintf(cFile, "\t%s[%s][%s] = %s;\n", llist->line.v1, llist->line.v2, llist->line.v3, llist->line.v4);
+                break;
+            }
             /* CASE EQUAL ID = ID; */
             case CODE_EQUAL: {
                 fprintf(cFile, "\t%s = %s;\n",llist->line.v1, llist->line.v2);
@@ -262,6 +283,8 @@ void cWriter(LLIST *llist){
 %token LE
 %token ENTAO
 %token SOMA
+%token VETOR
+%token VALORVETOR
 %token SUB
 %token <content> ID
 %token SE
@@ -392,7 +415,35 @@ cmd :   ENQUANTO ID FACA cmds FIMENQUANTO {
             
             $$ = llist;
         }
-        
+        | VETOR ABRE ID VIRG ID VIRG ID FECHA {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IGUAL\n");
+
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END ENQUANTO");
+            
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.v3 = $7;
+            llist->line.cmd = CODE_INIT_VETOR;
+            
+            $$ = llist;
+        }
+        | VALORVETOR ABRE ID VIRG ID VIRG ID VIRG ID FECHA {
+            LLIST *llist = (LLIST *)malloc(sizeof(LLIST));
+            if (llist == NULL) printf("ERROR READING IGUAL\n");
+
+            LLIST * aux = (LLIST *)malloc(sizeof(LLIST));
+            if (aux == NULL) printf("ERROR READING END ENQUANTO");
+            
+            llist->line.v1 = $3;
+            llist->line.v2 = $5;
+            llist->line.v3 = $7;
+            llist->line.v4 = $9;
+            llist->line.cmd = CODE_VETOR_VALOR;
+            
+            $$ = llist;
+        }
         | SOMA ABRE ID VIRG ID FECHA {
             LLIST *llist = (LLIST*)malloc(sizeof(LLIST));
             if (llist == NULL) printf("ERROR READGING COMMAND SOMA");

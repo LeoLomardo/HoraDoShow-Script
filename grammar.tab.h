@@ -74,17 +74,19 @@ extern int yydebug;
     LE = 275,                      /* LE  */
     ENTAO = 276,                   /* ENTAO  */
     SOMA = 277,                    /* SOMA  */
-    SUB = 278,                     /* SUB  */
-    ID = 279,                      /* ID  */
-    SE = 280,                      /* SE  */
-    SENAO = 281,                   /* SENAO  */
-    MULT = 282,                    /* MULT  */
-    FIMENQUANTO = 283,             /* FIMENQUANTO  */
-    VIRG = 284,                    /* VIRG  */
-    DIV = 285,                     /* DIV  */
-    DIF = 286,                     /* DIF  */
-    EQUAL = 287,                   /* EQUAL  */
-    NEWLINE = 288                  /* NEWLINE  */
+    VETOR = 278,                   /* VETOR  */
+    VALORVETOR = 279,              /* VALORVETOR  */
+    SUB = 280,                     /* SUB  */
+    ID = 281,                      /* ID  */
+    SE = 282,                      /* SE  */
+    SENAO = 283,                   /* SENAO  */
+    MULT = 284,                    /* MULT  */
+    FIMENQUANTO = 285,             /* FIMENQUANTO  */
+    VIRG = 286,                    /* VIRG  */
+    DIV = 287,                     /* DIV  */
+    DIF = 288,                     /* DIF  */
+    EQUAL = 289,                   /* EQUAL  */
+    NEWLINE = 290                  /* NEWLINE  */
   };
   typedef enum yytokentype yytoken_kind_t;
 #endif
@@ -93,13 +95,13 @@ extern int yydebug;
 #if ! defined YYSTYPE && ! defined YYSTYPE_IS_DECLARED
 union YYSTYPE
 {
-#line 277 "grammar.y"
+#line 300 "grammar.y"
 
     int var;
     char *content;
     struct llist *llistvar;
 
-#line 103 "grammar.tab.h"
+#line 105 "grammar.tab.h"
 
 };
 typedef union YYSTYPE YYSTYPE;

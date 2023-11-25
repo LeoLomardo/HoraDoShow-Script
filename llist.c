@@ -8,7 +8,8 @@ typedef struct line{
     short cmd;
     char *v1;
     char *v2;
-    
+    char *v3;
+    char *v4;
 }LINE;
 
 typedef struct llist{
